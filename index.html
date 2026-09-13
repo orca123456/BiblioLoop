@@ -102,6 +102,367 @@
             outline-offset: 2px;
         }
 
+        /* Reservation confirmation sequence */
+        .reservation-journey {
+            position: relative;
+            width: min(13rem, 100%);
+            height: 4.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .reservation-route,
+        .reservation-progress {
+            position: absolute;
+            left: 2rem;
+            right: 2rem;
+            top: 2.15rem;
+            height: 2px;
+            border-radius: 999px;
+        }
+
+        .reservation-route {
+            background: #2b2357;
+        }
+
+        .reservation-progress {
+            background: linear-gradient(90deg, #8f2fc1, #dd2d9b, #45b5a2);
+            transform: scaleX(0);
+            transform-origin: left center;
+        }
+
+        .journey-node {
+            position: absolute;
+            top: 1rem;
+            z-index: 2;
+            width: 2.35rem;
+            height: 2.35rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.75rem;
+            background: #171231;
+            border: 1px solid #2b2357;
+            color: #a78bfa;
+        }
+
+        .journey-node--seller {
+            left: 0;
+        }
+
+        .journey-node--hub {
+            right: 0;
+            color: #45b5a2;
+        }
+
+        .reservation-book {
+            position: absolute;
+            left: 2.25rem;
+            top: 1.4rem;
+            z-index: 3;
+            width: 1.6rem;
+            height: 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            color: white;
+            background: linear-gradient(135deg, #8f2fc1, #dd2d9b);
+            box-shadow: 0 6px 18px rgba(221, 45, 155, 0.24);
+            opacity: 0;
+        }
+
+        .reservation-active .reservation-progress {
+            animation: reservation-route-fill 1.3s cubic-bezier(.22, .8, .3, 1) both;
+        }
+
+        .reservation-active .reservation-book {
+            animation: reservation-book-route 1.3s cubic-bezier(.22, .8, .3, 1) both;
+        }
+
+        .reservation-active .journey-node--hub {
+            animation: reservation-hub-arrival .42s 1.08s cubic-bezier(.2, .9, .3, 1.35) both;
+        }
+
+        .reservation-dot {
+            display: inline-block;
+            width: 3px;
+            height: 3px;
+            margin-left: 3px;
+            border-radius: 999px;
+            background: #9ca3af;
+            animation: reservation-dot-pulse 1s ease-in-out infinite;
+        }
+
+        .reservation-dot:nth-child(2) {
+            animation-delay: .16s;
+        }
+
+        .reservation-dot:nth-child(3) {
+            animation-delay: .32s;
+        }
+
+        .receipt-celebrate {
+            animation: receipt-enter .46s cubic-bezier(.2, .9, .3, 1.15) both;
+        }
+
+        .success-seal {
+            position: relative;
+        }
+
+        .success-seal::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            border: 1px solid rgba(52, 211, 153, .45);
+            opacity: 0;
+        }
+
+        .receipt-celebrate .success-seal {
+            animation: success-seal-pop .5s .12s cubic-bezier(.2, .9, .3, 1.4) both;
+        }
+
+        .receipt-celebrate .success-seal::after {
+            animation: success-ring .65s .28s ease-out both;
+        }
+
+        .success-check {
+            stroke-dasharray: 24;
+            stroke-dashoffset: 24;
+        }
+
+        .receipt-celebrate .success-check {
+            animation: success-check-draw .42s .3s ease-out both;
+        }
+
+        .receipt-celebrate .qr-reveal {
+            animation: qr-reveal .42s .38s ease-out both;
+        }
+
+        .receipt-celebrate .receipt-detail-reveal {
+            animation: receipt-detail-reveal .38s .48s ease-out both;
+        }
+
+        .publishing-visual {
+            position: relative;
+            width: 8.5rem;
+            height: 7rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .publishing-halo {
+            position: absolute;
+            inset: 1rem .75rem 0;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(143, 47, 193, .24), transparent 68%);
+            opacity: 0;
+        }
+
+        .publishing-cover {
+            position: absolute;
+            left: 50%;
+            top: .25rem;
+            width: 4.25rem;
+            height: 5.65rem;
+            overflow: hidden;
+            border-radius: .65rem;
+            border: 1px solid rgba(167, 139, 250, .5);
+            background: #0c0a19;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, .34);
+            transform: translateX(-50%);
+        }
+
+        .publishing-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .publishing-scan {
+            position: absolute;
+            inset-inline: 0;
+            top: -15%;
+            height: 30%;
+            background: linear-gradient(to bottom, transparent, rgba(69, 181, 162, .48), transparent);
+            opacity: 0;
+        }
+
+        .publishing-badge {
+            position: absolute;
+            right: 1.25rem;
+            bottom: .4rem;
+            z-index: 2;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            color: #062b23;
+            background: #45b5a2;
+            border: 3px solid #110d24;
+            opacity: 0;
+            transform: scale(.45);
+        }
+
+        .publishing-bar {
+            width: 10rem;
+            max-width: 100%;
+            height: 3px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #2b2357;
+            margin: .85rem auto 0;
+        }
+
+        .publishing-bar::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #8f2fc1, #dd2d9b, #45b5a2);
+            transform: scaleX(0);
+            transform-origin: left center;
+        }
+
+        .publishing-active .publishing-halo {
+            animation: publishing-halo .9s ease-out both;
+        }
+
+        .publishing-active .publishing-cover {
+            animation: publishing-cover-rise 1.15s cubic-bezier(.2, .9, .3, 1.12) both;
+        }
+
+        .publishing-active .publishing-scan {
+            animation: publishing-scan .85s .12s ease-in-out both;
+        }
+
+        .publishing-active .publishing-badge {
+            animation: publishing-badge-pop .38s .86s cubic-bezier(.2, .9, .3, 1.4) both;
+        }
+
+        .publishing-active .publishing-bar::after {
+            animation: publishing-progress 1.15s ease-out both;
+        }
+
+        .catalog-card-enter {
+            animation: catalog-card-enter .62s cubic-bezier(.2, .9, .3, 1.08) both;
+        }
+
+        @keyframes reservation-route-fill {
+            to { transform: scaleX(1); }
+        }
+
+        @keyframes reservation-book-route {
+            0% { opacity: 0; transform: translateX(0) translateY(3px) rotate(-8deg) scale(.88); }
+            14% { opacity: 1; }
+            52% { transform: translateX(4.1rem) translateY(-5px) rotate(3deg) scale(1); }
+            100% { opacity: 1; transform: translateX(8.15rem) translateY(0) rotate(0) scale(.88); }
+        }
+
+        @keyframes reservation-hub-arrival {
+            0% { transform: scale(1); border-color: #2b2357; }
+            55% { transform: scale(1.14); border-color: #45b5a2; box-shadow: 0 0 0 7px rgba(69, 181, 162, .09); }
+            100% { transform: scale(1); border-color: rgba(69, 181, 162, .55); box-shadow: 0 0 0 3px rgba(69, 181, 162, .07); }
+        }
+
+        @keyframes reservation-dot-pulse {
+            0%, 70%, 100% { opacity: .28; transform: translateY(0); }
+            35% { opacity: 1; transform: translateY(-2px); }
+        }
+
+        @keyframes receipt-enter {
+            0% { opacity: 0; transform: translateY(12px) scale(.97); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes success-seal-pop {
+            0% { opacity: 0; transform: scale(.55) rotate(-10deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0); }
+        }
+
+        @keyframes success-ring {
+            0% { opacity: .8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.9); }
+        }
+
+        @keyframes success-check-draw {
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes qr-reveal {
+            0% { opacity: 0; transform: translateY(7px) scale(.94); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes receipt-detail-reveal {
+            0% { opacity: 0; transform: translateY(5px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes publishing-halo {
+            0% { opacity: 0; transform: scale(.72); }
+            55% { opacity: 1; }
+            100% { opacity: .55; transform: scale(1.1); }
+        }
+
+        @keyframes publishing-cover-rise {
+            0% { opacity: 0; transform: translateX(-50%) translateY(14px) scale(.9) rotate(-3deg); }
+            55% { opacity: 1; transform: translateX(-50%) translateY(-3px) scale(1.03) rotate(1deg); }
+            100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1) rotate(0); }
+        }
+
+        @keyframes publishing-scan {
+            0% { top: -15%; opacity: 0; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { top: 90%; opacity: 0; }
+        }
+
+        @keyframes publishing-badge-pop {
+            0% { opacity: 0; transform: scale(.45) rotate(-12deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0); }
+        }
+
+        @keyframes publishing-progress {
+            to { transform: scaleX(1); }
+        }
+
+        @keyframes catalog-card-enter {
+            0% { opacity: 0; transform: translateY(18px) scale(.97); box-shadow: 0 0 0 rgba(69, 181, 162, 0); }
+            58% { opacity: 1; transform: translateY(-3px) scale(1.01); box-shadow: 0 0 0 4px rgba(69, 181, 162, .1); }
+            100% { opacity: 1; transform: translateY(0) scale(1); box-shadow: 0 0 0 rgba(69, 181, 162, 0); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reservation-active .reservation-progress,
+            .reservation-active .reservation-book,
+            .reservation-active .journey-node--hub,
+            .reservation-dot,
+            .receipt-celebrate,
+            .receipt-celebrate .success-seal,
+            .receipt-celebrate .success-seal::after,
+            .receipt-celebrate .success-check,
+            .receipt-celebrate .qr-reveal,
+            .receipt-celebrate .receipt-detail-reveal,
+            .publishing-active .publishing-halo,
+            .publishing-active .publishing-cover,
+            .publishing-active .publishing-scan,
+            .publishing-active .publishing-badge,
+            .publishing-active .publishing-bar::after,
+            .catalog-card-enter {
+                animation: none !important;
+            }
+
+            .reservation-active .reservation-progress { transform: scaleX(1); }
+            .reservation-active .reservation-book { opacity: 1; transform: translateX(8.15rem) scale(.88); }
+            .success-check { stroke-dashoffset: 0; }
+            .publishing-halo,
+            .publishing-badge { opacity: 1; }
+            .publishing-bar::after { transform: scaleX(1); }
+        }
+
         /* Mobile bottom sheet */
         @media (max-width: 640px) {
             .mobile-bottom-sheet {
@@ -307,7 +668,7 @@
             </div>
 
             <div id="showMoreWrap" class="hidden text-center mt-7">
-                <button id="showMoreBtn" type="button" onclick="showMoreResources()" class="px-5 py-2.5 rounded-lg bg-surface-850 hover:bg-surface-800 border border-surface-700 text-sm font-semibold text-gray-200 transition-colors">Show more books</button>
+                <button id="showMoreBtn" type="button" onclick="showMoreResources()" class="px-5 py-2.5 rounded-lg bg-surface-850 hover:bg-surface-800 border border-surface-700 text-sm font-semibold text-gray-200 transition-colors">Show more</button>
             </div>
 
             <!-- Empty State -->
@@ -756,49 +1117,94 @@
                     <button type="button" data-fulfillment="meetup"
                         class="fulfillment-method border-brand-teal bg-brand-teal/10 text-white p-2.5 rounded-xl border text-left transition-all"
                         onclick="selectFulfillment('meetup', this)">
-                        <span class="block text-xs font-bold">Hub Pickup</span>
-                        <span class="block text-[9px] text-gray-400 mt-0.5">Collect with your secure QR pass</span>
+                        <span class="flex items-start gap-2">
+                            <svg class="w-4 h-4 mt-0.5 flex-shrink-0 text-brand-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6M9 11h.01M15 11h.01"></path>
+                            </svg>
+                            <span>
+                                <span class="block text-xs font-bold">Hub Pickup</span>
+                                <span class="block text-[9px] text-gray-400 mt-0.5">Collect with your secure QR pass</span>
+                            </span>
+                        </span>
                     </button>
                     <button id="deliveryFulfillmentBtn" type="button" data-fulfillment="delivery"
                         class="fulfillment-method border-surface-700 bg-surface-850 text-gray-300 p-2.5 rounded-xl border text-left transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                         onclick="selectFulfillment('delivery', this)">
-                        <span class="block text-xs font-bold">Delivery</span>
-                        <span class="block text-[9px] text-gray-400 mt-0.5">Delivered to your address · ₱75</span>
+                        <span class="flex items-start gap-2">
+                            <svg class="w-4 h-4 mt-0.5 flex-shrink-0 text-brand-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 7h11v10H3V7zm11 3h4l3 3v4h-7v-7zM7 20a2 2 0 100-4 2 2 0 000 4zm11 0a2 2 0 100-4 2 2 0 000 4z"></path>
+                            </svg>
+                            <span>
+                                <span class="block text-xs font-bold">Delivery</span>
+                                <span class="block text-[9px] text-gray-400 mt-0.5">Delivered to your address · ₱75</span>
+                            </span>
+                        </span>
                     </button>
                 </div>
                 <p class="text-[10px] text-gray-500 leading-relaxed mb-3">For seller-held books, the seller transfers the book to BiblioLoop after confirmation. Buyers and sellers do not need to meet directly.</p>
-                <div id="deliveryAddressWrap" class="hidden mb-3">
-                    <label for="deliveryAddress" class="block text-[11px] font-semibold text-gray-400 mb-1">Delivery
-                        address</label>
-                    <textarea id="deliveryAddress" rows="2"
-                        class="w-full bg-surface-850 border border-surface-700 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-brand-teal"
-                        placeholder="House/unit, street, barangay, city"></textarea>
-                    <p class="text-[9px] text-gray-500 mt-1">Your full address is kept inside this order and is not
-                        shown on the public listing.</p>
+                <div id="deliveryAddressWrap" class="hidden mb-3 space-y-2.5">
+                    <div>
+                        <label for="deliveryAddress" class="block text-[11px] font-semibold text-gray-300 mb-1">Delivery
+                            address</label>
+                        <textarea id="deliveryAddress" rows="2" autocomplete="street-address"
+                            class="w-full bg-surface-850 border border-surface-700 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-brand-teal"
+                            placeholder="House/unit, street, barangay, city"></textarea>
+                        <p id="deliveryAddressError" class="hidden text-[9px] text-red-300 mt-1" aria-live="polite">Enter a complete delivery address.</p>
+                    </div>
+                    <div>
+                        <label for="deliveryContact" class="block text-[11px] font-semibold text-gray-300 mb-1">Contact
+                            number</label>
+                        <input id="deliveryContact" type="tel" inputmode="numeric" autocomplete="tel" maxlength="11" pattern="[0-9]{11}"
+                            oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)"
+                            class="w-full bg-surface-850 border border-surface-700 rounded-xl px-3 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-brand-teal"
+                            placeholder="09XXXXXXXXX">
+                        <p id="deliveryContactError" class="hidden text-[9px] text-red-300 mt-1" aria-live="polite">Enter an 11-digit Philippine mobile number starting with 09.</p>
+                    </div>
+                    <p class="text-[9px] text-gray-500 leading-relaxed">Your address and contact number stay inside this order and are shared only with BiblioLoop and the assigned delivery rider.</p>
                 </div>
 
                 <!-- Payment Channels in PH -->
                 <p class="text-xs font-semibold text-white mb-2">Payment</p>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
-                    <button
-                        class="pay-method active p-2 rounded-xl border border-brand-purple bg-brand-purple/15 text-center text-xs font-semibold text-white transition-all"
+                    <button type="button"
+                        class="pay-method active min-h-16 p-2 rounded-xl border border-brand-purple bg-brand-purple/15 text-center text-xs font-semibold text-white transition-all"
                         onclick="selectPayment(this, 'gcash')">
-                        GCash / Maya
+                        <span class="flex flex-col items-center gap-1.5">
+                            <svg class="w-5 h-5 text-brand-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M5 7h13a2 2 0 012 2v9H5a2 2 0 01-2-2V7.5A2.5 2.5 0 015.5 5H17M16 11h5v4h-5a2 2 0 010-4z"></path>
+                            </svg>
+                            <span>GCash / Maya</span>
+                        </span>
                     </button>
-                    <button
-                        class="pay-method p-2 rounded-xl border border-surface-700 bg-surface-850 text-center text-xs font-semibold text-gray-300 hover:text-white transition-all"
+                    <button type="button"
+                        class="pay-method min-h-16 p-2 rounded-xl border border-surface-700 bg-surface-850 text-center text-xs font-semibold text-gray-300 hover:text-white transition-all"
                         onclick="selectPayment(this, 'card')">
-                        Card
+                        <span class="flex flex-col items-center gap-1.5">
+                            <svg class="w-5 h-5 text-brand-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M3 6h18v12H3V6zm0 4h18M7 15h3"></path>
+                            </svg>
+                            <span>Card</span>
+                        </span>
                     </button>
-                    <button
-                        class="pay-method p-2 rounded-xl border border-surface-700 bg-surface-850 text-center text-xs font-semibold text-gray-300 hover:text-white transition-all"
+                    <button type="button"
+                        class="pay-method min-h-16 p-2 rounded-xl border border-surface-700 bg-surface-850 text-center text-xs font-semibold text-gray-300 hover:text-white transition-all"
                         onclick="selectPayment(this, 'credits')">
-                        Credits
+                        <span class="flex flex-col items-center gap-1.5">
+                            <svg class="w-5 h-5 text-brand-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M20 6c0 1.66-3.58 3-8 3S4 7.66 4 6s3.58-3 8-3 8 1.34 8 3zM4 6v6c0 1.66 3.58 3 8 3s8-1.34 8-3V6M4 12v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"></path>
+                            </svg>
+                            <span>Credits</span>
+                        </span>
                     </button>
-                    <button
-                        class="pay-method p-2 rounded-xl border border-surface-700 bg-surface-850 text-center text-xs font-semibold text-gray-300 hover:text-white transition-all"
+                    <button type="button"
+                        class="pay-method min-h-16 p-2 rounded-xl border border-surface-700 bg-surface-850 text-center text-xs font-semibold text-gray-300 hover:text-white transition-all"
                         onclick="selectPayment(this, 'hub')">
-                        Pay at hub
+                        <span class="flex flex-col items-center gap-1.5">
+                            <svg class="w-5 h-5 text-brand-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6M9 11h.01M15 11h.01"></path>
+                            </svg>
+                            <span>Pay at hub</span>
+                        </span>
                     </button>
                 </div>
 
@@ -822,34 +1228,51 @@
         </div>
 
         <!-- MODAL 2: PROCESSING STATE -->
-        <div id="processingModal"
+        <div id="processingModal" role="status" aria-live="polite"
             class="glass-modal w-full max-w-xs rounded-2xl p-6 hidden flex-col items-center justify-center text-center shadow-2xl border border-surface-700">
-            <div class="w-10 h-10 rounded-full border-2 border-surface-750 border-t-brand-purple animate-spin mb-3">
+            <div class="reservation-journey" aria-hidden="true">
+                <div class="reservation-route"></div>
+                <div class="reservation-progress"></div>
+                <div class="journey-node journey-node--seller">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7v10l8 4m0-10v10"></path>
+                    </svg>
+                </div>
+                <div class="reservation-book">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 19.5A2.5 2.5 0 016.5 17H20M6.5 3H20v18H6.5A2.5 2.5 0 014 18.5v-13A2.5 2.5 0 016.5 3z"></path>
+                    </svg>
+                </div>
+                <div class="journey-node journey-node--hub">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6M9 11h.01M15 11h.01"></path>
+                    </svg>
+                </div>
             </div>
             <h4 class="text-sm font-bold text-white mb-1">Confirming your reservation...</h4>
-            <p class="text-xs text-gray-400">Notifying the seller and preparing the hub handoff.</p>
+            <p class="text-xs text-gray-400">Securing the book and creating your QR pass<span aria-hidden="true"><span class="reservation-dot"></span><span class="reservation-dot"></span><span class="reservation-dot"></span></span></p>
         </div>
 
         <!-- MODAL 3: RECEIPT & QR CODE -->
-        <div id="receiptModal"
+        <div id="receiptModal" role="dialog" aria-modal="true" aria-labelledby="reservationSuccessTitle"
             class="glass-modal mobile-bottom-sheet w-full max-w-sm rounded-2xl sm:rounded-3xl p-5 sm:p-6 hidden flex-col items-center text-center shadow-2xl border border-surface-700 max-h-[92vh] overflow-y-auto">
 
             <div
-                class="w-10 h-10 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-3 border border-emerald-500/30">
+                class="success-seal w-10 h-10 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-3 border border-emerald-500/30">
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                    <path class="success-check" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
 
-            <h3 class="text-base sm:text-lg font-bold font-display text-white mb-1">Book Reserved!</h3>
+            <h3 id="reservationSuccessTitle" class="text-base sm:text-lg font-bold font-display text-white mb-1">Book Reserved!</h3>
             <p id="receiptFulfillmentText" class="text-xs text-gray-400 mb-4 px-2">We will notify you when your book is
                 ready for hub pickup or delivery.</p>
 
-            <div class="bg-white p-3 rounded-xl mb-4 shadow-sm">
+            <div class="qr-reveal bg-white p-3 rounded-xl mb-4 shadow-sm">
                 <div class="grid grid-cols-6 gap-1 w-32 h-32" id="mockQrCode"></div>
             </div>
 
-            <div class="w-full bg-surface-850 rounded-xl p-2.5 mb-4 border border-surface-700">
+            <div class="receipt-detail-reveal w-full bg-surface-850 rounded-xl p-2.5 mb-4 border border-surface-700">
                 <p class="text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Order Reference</p>
                 <p class="text-sm font-mono font-bold text-white tracking-wider">#BL-<span id="orderIdSpan"></span></p>
             </div>
@@ -912,6 +1335,33 @@
                         placeholder="Describe the book, edition, highlights, writing, missing pages, or other details."></textarea>
                 </div>
 
+                <div>
+                    <div class="flex items-center justify-between gap-3 mb-1.5">
+                        <label for="cImage" class="block text-gray-200 font-semibold">Material photo</label>
+                        <span class="text-[10px] text-gray-500">Required</span>
+                    </div>
+                    <input type="file" id="cImage" aria-required="true" accept="image/jpeg,image/png,image/webp"
+                        class="sr-only" onchange="previewListingImage(event)">
+                    <label id="cImageUploadLabel" for="cImage"
+                        class="relative flex min-h-36 items-center justify-center overflow-hidden rounded-xl border border-dashed border-surface-700 bg-surface-850 cursor-pointer hover:border-brand-purple focus-within:border-brand-purple transition-colors">
+                        <div id="cImagePrompt" class="flex flex-col items-center px-5 py-6 text-center">
+                            <svg class="w-7 h-7 text-violet-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M3 16.5l4.5-4.5 3.5 3.5 2-2 5 5M14.5 8.5h.01M5 4h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"></path>
+                            </svg>
+                            <span class="text-xs font-semibold text-white">Upload a clear photo</span>
+                            <span class="text-[10px] text-gray-500 mt-1">Front cover or the actual material · JPG, PNG, or WEBP · Up to 5 MB</span>
+                        </div>
+                        <img id="cImagePreview" alt="Selected material preview"
+                            class="hidden w-full h-48 object-cover">
+                    </label>
+                    <div id="cImageActions" class="hidden items-center justify-between gap-3 mt-2">
+                        <p id="cImageName" class="text-[10px] text-gray-400 truncate"></p>
+                        <button type="button" onclick="resetListingImage()"
+                            class="flex-shrink-0 text-[10px] font-semibold text-red-300 hover:text-red-200">Remove photo</button>
+                    </div>
+                    <p id="cImageError" class="hidden text-[10px] text-red-300 mt-1.5" aria-live="polite"></p>
+                </div>
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label for="cCourse" class="block text-gray-300 font-medium mb-1">Subject / Genre</label>
@@ -932,8 +1382,8 @@
 
                 <div>
                     <label for="cCategory" class="block text-gray-300 font-medium mb-1">Category</label>
-                    <div class="relative">
-                        <select id="cCategory"
+                    <div id="cCategorySelectWrap" class="relative">
+                        <select id="cCategory" onchange="toggleCustomListingField('category', true)"
                             class="w-full bg-surface-850 border border-surface-700 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-brand-purple transition-colors appearance-none text-sm">
                             <option value="Fiction">Fiction & Literature</option>
                             <option value="Non-Fiction">Non-Fiction</option>
@@ -941,6 +1391,7 @@
                             <option value="Textbooks">Textbooks & Academic</option>
                             <option value="Reviewers">Reviewers & Professional Guides</option>
                             <option value="BLIS">BLIS & Library Science</option>
+                            <option value="__other__">Other — type a category</option>
                         </select>
                         <div
                             class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
@@ -949,6 +1400,19 @@
                                     d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
+                    </div>
+                    <div id="cCategoryOtherWrap"
+                        class="hidden w-full bg-surface-850 border border-brand-purple rounded-xl px-3.5 py-2.5 items-center gap-1.5 focus-within:ring-2 focus-within:ring-brand-teal/40">
+                        <span class="text-sm font-medium text-white flex-shrink-0">Other:</span>
+                        <input id="cCategoryOther" type="text" maxlength="50"
+                            class="min-w-0 flex-1 bg-transparent text-white placeholder-gray-500 focus:outline-none text-sm"
+                            placeholder="Type a category">
+                        <button type="button" onclick="returnToListingSelect('category')" title="Choose from the category list"
+                            aria-label="Return to category list" class="text-gray-500 hover:text-white flex-shrink-0">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
 
@@ -965,15 +1429,31 @@
                     </div>
                     <div>
                         <label for="cLocation" class="block text-gray-300 font-medium mb-1">City / Area</label>
-                        <select id="cLocation"
-                            class="w-full bg-surface-850 border border-surface-700 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-brand-purple text-sm">
-                            <option>Davao City</option>
-                            <option>Quezon City</option>
-                            <option>Manila</option>
-                            <option>Makati</option>
-                            <option>Cebu City</option>
-                            <option>Baguio City</option>
-                        </select>
+                        <div id="cLocationSelectWrap">
+                            <select id="cLocation" onchange="toggleCustomListingField('location', true)"
+                                class="w-full bg-surface-850 border border-surface-700 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-brand-purple text-sm">
+                                <option>Davao City</option>
+                                <option>Quezon City</option>
+                                <option>Manila</option>
+                                <option>Makati</option>
+                                <option>Cebu City</option>
+                                <option>Baguio City</option>
+                                <option value="__other__">Other — type a city or area</option>
+                            </select>
+                        </div>
+                        <div id="cLocationOtherWrap"
+                            class="hidden w-full bg-surface-850 border border-brand-purple rounded-xl px-3.5 py-2.5 items-center gap-1.5 focus-within:ring-2 focus-within:ring-brand-teal/40">
+                            <span class="text-sm font-medium text-white flex-shrink-0">Other:</span>
+                            <input id="cLocationOther" type="text" maxlength="60"
+                                class="min-w-0 flex-1 bg-transparent text-white placeholder-gray-500 focus:outline-none text-sm"
+                                placeholder="Type a city or area">
+                            <button type="button" onclick="returnToListingSelect('location')" title="Choose from the city list"
+                                aria-label="Return to city list" class="text-gray-500 hover:text-white flex-shrink-0">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -983,13 +1463,23 @@
                         <label id="cMeetupLabel"
                             class="flex items-center gap-3 p-3 rounded-xl bg-surface-850 border border-surface-700 cursor-pointer hover:border-brand-teal/50 transition-colors">
                             <input type="checkbox" id="cMeetup" checked class="accent-[#45b5a2]">
-                            <span><strong class="block text-white text-[11px]">Drop off at the hub</strong><small
+                            <span class="w-8 h-8 rounded-lg bg-brand-teal/10 text-brand-teal flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6M9 11h.01M15 11h.01"></path>
+                                </svg>
+                            </span>
+                            <span class="min-w-0"><strong class="block text-white text-[11px]">Drop off at the hub</strong><small
                                     class="text-gray-500">Bring it after an order is confirmed</small></span>
                         </label>
                         <label id="cDeliveryLabel"
                             class="flex items-center gap-3 p-3 rounded-xl bg-surface-850 border border-surface-700 cursor-pointer hover:border-brand-teal/50 transition-colors">
                             <input type="checkbox" id="cDelivery" checked class="accent-[#45b5a2]">
-                            <span><strong class="block text-white text-[11px]">Send by courier</strong><small
+                            <span class="w-8 h-8 rounded-lg bg-brand-teal/10 text-brand-teal flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 7h11v10H3V7zm11 3h4l3 3v4h-7v-7zM7 20a2 2 0 100-4 2 2 0 000 4zm11 0a2 2 0 100-4 2 2 0 000 4z"></path>
+                                </svg>
+                            </span>
+                            <span class="min-w-0"><strong class="block text-white text-[11px]">Send by courier</strong><small
                                     class="text-gray-500">Ship it to the hub</small></span>
                         </label>
                     </div>
@@ -1058,7 +1548,27 @@
             </form>
         </div>
 
-        <!-- MODAL 5: BOOK DETAILS, LOCATION & FULFILLMENT -->
+        <!-- MODAL 5: PUBLISHING STATE -->
+        <div id="publishingModal" role="status" aria-live="polite"
+            class="glass-modal w-full max-w-xs rounded-2xl p-6 hidden flex-col items-center justify-center text-center shadow-2xl border border-surface-700">
+            <div class="publishing-visual" aria-hidden="true">
+                <div class="publishing-halo"></div>
+                <div class="publishing-cover">
+                    <img id="publishingPreviewImage" src="" alt="">
+                    <div class="publishing-scan"></div>
+                </div>
+                <div class="publishing-badge">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+            </div>
+            <h4 class="text-sm font-bold text-white mb-1">Publishing your book...</h4>
+            <p class="text-xs text-gray-400">Preparing the photo and adding your listing to the catalog.</p>
+            <div class="publishing-bar" aria-hidden="true"></div>
+        </div>
+
+        <!-- MODAL 6: BOOK DETAILS, LOCATION & FULFILLMENT -->
         <div id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailTitle"
             class="glass-modal mobile-bottom-sheet w-full max-w-3xl rounded-2xl sm:rounded-3xl hidden flex-col shadow-2xl border border-surface-700 max-h-[92vh] overflow-hidden">
             <div class="flex items-center justify-between px-5 py-4 border-b border-surface-750">
@@ -1166,7 +1676,7 @@
             </div>
         </div>
 
-        <!-- MODAL 6: BUYER-SELLER CHAT -->
+        <!-- MODAL 7: BUYER-SELLER CHAT -->
         <div id="chatModal" role="dialog" aria-modal="true" aria-labelledby="chatListingTitle"
             class="glass-modal mobile-bottom-sheet w-full max-w-md rounded-2xl sm:rounded-3xl hidden flex-col shadow-2xl border border-surface-700 h-[78vh] max-h-[680px] overflow-hidden">
             <div class="flex items-center justify-between px-4 py-3 border-b border-surface-750">
@@ -1206,7 +1716,7 @@
             </form>
         </div>
 
-        <!-- MODAL 7: BIBLIO CREDITS & ACCOUNT PROFILE (VISIBLE TO USERS WITH ACCOUNTS) -->
+        <!-- MODAL 8: BIBLIO CREDITS & ACCOUNT PROFILE (VISIBLE TO USERS WITH ACCOUNTS) -->
         <div id="accountCreditsModal" role="dialog" aria-modal="true" aria-labelledby="creditsModalTitle"
             class="glass-modal mobile-bottom-sheet w-full max-w-md rounded-2xl sm:rounded-3xl p-5 sm:p-6 hidden flex-col shadow-2xl border border-brand-purple/30 max-h-[92vh] overflow-y-auto no-scrollbar">
 
@@ -1950,6 +2460,20 @@
             });
         }
 
+        // Remove only the temporary test listing requested by the owner.
+        const resourceCountBeforeTestCleanup = resources.length;
+        resources = resources.filter(resource => !(
+            String(resource.title || '').trim().toLowerCase() === 'd2' &&
+            String(resource.seller || '').startsWith('You')
+        ));
+        if (resources.length !== resourceCountBeforeTestCleanup) {
+            try {
+                localStorage.setItem('biblioloop_resources', JSON.stringify(resources));
+            } catch (error) {
+                console.warn('BiblioLoop could not persist the requested listing removal.', error);
+            }
+        }
+
         // Keep every catalog card visually complete, including older saved listings.
         resources.forEach(resource => {
             if (typeof resource.image !== 'string' || !resource.image.trim()) {
@@ -2008,6 +2532,9 @@
         let visibleResourceLimit = 20;
         let currentResourceId = null;
         let selectedFulfillment = 'meetup';
+        let listingImageDataUrl = '';
+        let isPublishingListing = false;
+        let newlyPublishedResourceId = null;
         let conversations = loadJSON('biblioloop_conversations', {});
         let closeModalTimer = null;
 
@@ -2019,6 +2546,7 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
+            syncCatalogLocationOptions();
             const catalogLocationSelect = document.getElementById('catalogLocationSelect');
             if (catalogLocationSelect) catalogLocationSelect.value = currentLocationFilter;
             initConsignRadioListeners();
@@ -2051,6 +2579,7 @@
                     res.course.toLowerCase().includes(searchTerm) ||
                     res.author.toLowerCase().includes(searchTerm) ||
                     res.isbn.toLowerCase().includes(searchTerm) ||
+                    res.category.toLowerCase().includes(searchTerm) ||
                     res.location.toLowerCase().includes(searchTerm) ||
                     res.description.toLowerCase().includes(searchTerm);
                 const matchCat = (currentCategory === 'All') || (res.category === currentCategory);
@@ -2077,7 +2606,7 @@
                 visibleResources.forEach(res => {
                     const tag = lisTags[res.tag];
                     const card = document.createElement('div');
-                    card.className = "glass-card group rounded-xl overflow-hidden flex flex-col transition-colors cursor-pointer";
+                    card.className = `glass-card group rounded-xl overflow-hidden flex flex-col transition-colors cursor-pointer${res.id === newlyPublishedResourceId ? ' catalog-card-enter' : ''}`;
 
                     const safeTitle = escapeHtml(res.title);
                     const safeAuthor = escapeHtml(res.author);
@@ -2365,8 +2894,25 @@
             renderResources();
         }
 
+        function syncCatalogLocationOptions() {
+            const select = document.getElementById('catalogLocationSelect');
+            if (!select) return;
+            const existingLocations = new Set(Array.from(select.options).map(option => option.value));
+            const catalogLocations = [...new Set(resources.map(resource => resource.location).filter(Boolean))]
+                .sort((a, b) => a.localeCompare(b));
+            catalogLocations.forEach(location => {
+                if (existingLocations.has(location)) return;
+                const option = document.createElement('option');
+                option.value = location;
+                option.textContent = location;
+                option.className = 'bg-surface-850 text-white';
+                select.appendChild(option);
+                existingLocations.add(location);
+            });
+        }
+
         function updateUserLocation(location) {
-            if (!cityCoordinates[location]) return;
+            if (!location) return;
             userAccount.location = location;
             saveMarketplaceState();
 
@@ -2539,6 +3085,14 @@
                 button.classList.remove('border-surface-700', 'bg-surface-850', 'text-gray-300');
             }
             document.getElementById('deliveryAddressWrap').classList.toggle('hidden', mode !== 'delivery');
+            if (mode !== 'delivery') {
+                document.getElementById('deliveryAddress').classList.remove('border-red-400');
+                document.getElementById('deliveryContact').classList.remove('border-red-400');
+                document.getElementById('deliveryAddress').removeAttribute('aria-invalid');
+                document.getElementById('deliveryContact').removeAttribute('aria-invalid');
+                document.getElementById('deliveryAddressError').classList.add('hidden');
+                document.getElementById('deliveryContactError').classList.add('hidden');
+            }
             updateTotal();
         }
 
@@ -2582,12 +3136,36 @@
                 showToast("Pay at Hub is available with Hub Pickup. Choose an online payment method for delivery.", "ℹ️");
                 return;
             }
-            if (selectedFulfillment === 'delivery' && !document.getElementById('deliveryAddress').value.trim()) {
-                document.getElementById('deliveryAddress').focus();
-                document.getElementById('deliveryAddress').classList.add('border-red-400');
-                return;
+            const deliveryAddress = document.getElementById('deliveryAddress');
+            const deliveryContact = document.getElementById('deliveryContact');
+            const deliveryAddressError = document.getElementById('deliveryAddressError');
+            const deliveryContactError = document.getElementById('deliveryContactError');
+            let firstInvalidDeliveryField = null;
+
+            if (selectedFulfillment === 'delivery') {
+                const addressIsValid = deliveryAddress.value.trim().length >= 10;
+                const contactIsValid = /^09\d{9}$/.test(deliveryContact.value);
+
+                deliveryAddress.classList.toggle('border-red-400', !addressIsValid);
+                deliveryAddress.setAttribute('aria-invalid', String(!addressIsValid));
+                deliveryAddressError.classList.toggle('hidden', addressIsValid);
+                deliveryContact.classList.toggle('border-red-400', !contactIsValid);
+                deliveryContact.setAttribute('aria-invalid', String(!contactIsValid));
+                deliveryContactError.classList.toggle('hidden', contactIsValid);
+
+                if (!addressIsValid) firstInvalidDeliveryField = deliveryAddress;
+                if (!contactIsValid && !firstInvalidDeliveryField) firstInvalidDeliveryField = deliveryContact;
+                if (firstInvalidDeliveryField) {
+                    firstInvalidDeliveryField.focus();
+                    return;
+                }
             }
-            document.getElementById('deliveryAddress').classList.remove('border-red-400');
+            deliveryAddress.classList.remove('border-red-400');
+            deliveryContact.classList.remove('border-red-400');
+            deliveryAddress.removeAttribute('aria-invalid');
+            deliveryContact.removeAttribute('aria-invalid');
+            deliveryAddressError.classList.add('hidden');
+            deliveryContactError.classList.add('hidden');
 
             const donatedItems = cart.filter(item => item.tag === 'blue');
             const regularItems = cart.filter(item => item.tag !== 'blue');
@@ -2616,14 +3194,20 @@
             }
 
             hideAllModals();
-            document.getElementById('processingModal').classList.remove('hidden');
-            document.getElementById('processingModal').classList.add('flex');
+            const processingModal = document.getElementById('processingModal');
+            processingModal.classList.remove('reservation-active');
+            void processingModal.offsetWidth;
+            processingModal.classList.remove('hidden');
+            processingModal.classList.add('flex', 'reservation-active');
 
             setTimeout(() => {
                 hideAllModals();
                 document.getElementById('orderIdSpan').innerText = Math.floor(Math.random() * 89999) + 10000;
-                document.getElementById('receiptModal').classList.remove('hidden');
-                document.getElementById('receiptModal').classList.add('flex');
+                const receiptModal = document.getElementById('receiptModal');
+                receiptModal.classList.remove('receipt-celebrate');
+                void receiptModal.offsetWidth;
+                receiptModal.classList.remove('hidden');
+                receiptModal.classList.add('flex', 'receipt-celebrate');
                 document.getElementById('receiptFulfillmentText').textContent = hasSellerHeld
                     ? (selectedFulfillment === 'delivery'
                         ? 'Reservation confirmed. The seller will transfer the book to BiblioLoop first. Delivery begins after hub intake and verification.'
@@ -2633,6 +3217,8 @@
                         : `Your book is ready at the BiblioLoop Hub${selectedPaymentMethod === 'hub' ? ', with payment due on collection' : ''}. Present this secure QR pass when you collect it.`);
 
                 cart = [];
+                deliveryAddress.value = '';
+                deliveryContact.value = '';
                 saveMarketplaceState();
                 updateCartBadges();
             }, 1600);
@@ -2651,13 +3237,44 @@
         }
 
         // Consign Modal
+        function toggleCustomListingField(field, shouldFocus = false) {
+            const isCategory = field === 'category';
+            const select = document.getElementById(isCategory ? 'cCategory' : 'cLocation');
+            const input = document.getElementById(isCategory ? 'cCategoryOther' : 'cLocationOther');
+            const selectWrap = document.getElementById(isCategory ? 'cCategorySelectWrap' : 'cLocationSelectWrap');
+            const otherWrap = document.getElementById(isCategory ? 'cCategoryOtherWrap' : 'cLocationOtherWrap');
+            if (!select || !input || !selectWrap || !otherWrap) return;
+
+            const isOther = select.value === '__other__';
+            selectWrap.classList.toggle('hidden', isOther);
+            otherWrap.classList.toggle('hidden', !isOther);
+            otherWrap.classList.toggle('flex', isOther);
+            input.required = isOther;
+            otherWrap.setAttribute('aria-hidden', String(!isOther));
+            if (!isOther) input.value = '';
+            if (isOther && shouldFocus) setTimeout(() => input.focus(), 30);
+        }
+
+        function returnToListingSelect(field) {
+            const isCategory = field === 'category';
+            const select = document.getElementById(isCategory ? 'cCategory' : 'cLocation');
+            if (!select) return;
+            select.selectedIndex = 0;
+            toggleCustomListingField(field);
+            setTimeout(() => select.focus(), 30);
+        }
+
         function toggleConsignModal() {
             hideAllModals();
             openOverlay();
             const listingLocation = document.getElementById('cLocation');
-            if (listingLocation && cityCoordinates[userAccount.location]) {
-                listingLocation.value = userAccount.location;
+            if (listingLocation && userAccount.location) {
+                const hasListedLocation = Array.from(listingLocation.options).some(option => option.value === userAccount.location);
+                listingLocation.value = hasListedLocation ? userAccount.location : '__other__';
+                if (!hasListedLocation) document.getElementById('cLocationOther').value = userAccount.location;
             }
+            toggleCustomListingField('category');
+            toggleCustomListingField('location');
             const checkedRadio = document.querySelector('input[name="lisTag"]:checked') || document.querySelector('input[name="lisTag"][value="red"]');
             if (checkedRadio) {
                 checkedRadio.checked = true;
@@ -2726,8 +3343,102 @@
             }
         }
 
+        function setListingImageError(message = '') {
+            const error = document.getElementById('cImageError');
+            if (!error) return;
+            error.textContent = message;
+            error.classList.toggle('hidden', !message);
+        }
+
+        function resetListingImage() {
+            const input = document.getElementById('cImage');
+            const preview = document.getElementById('cImagePreview');
+            const prompt = document.getElementById('cImagePrompt');
+            const actions = document.getElementById('cImageActions');
+            const fileName = document.getElementById('cImageName');
+            const uploadLabel = document.getElementById('cImageUploadLabel');
+
+            listingImageDataUrl = '';
+            if (input) input.value = '';
+            if (preview) {
+                preview.src = '';
+                preview.classList.add('hidden');
+            }
+            if (prompt) prompt.classList.remove('hidden');
+            if (actions) {
+                actions.classList.add('hidden');
+                actions.classList.remove('flex');
+            }
+            if (fileName) fileName.textContent = '';
+            if (uploadLabel) uploadLabel.classList.remove('border-brand-teal');
+            setListingImageError();
+        }
+
+        function previewListingImage(event) {
+            const input = event.target;
+            const file = input.files && input.files[0];
+            if (!file) {
+                resetListingImage();
+                return;
+            }
+
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                resetListingImage();
+                setListingImageError('Choose a JPG, PNG, or WEBP image.');
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                resetListingImage();
+                setListingImageError('The photo must be 5 MB or smaller.');
+                return;
+            }
+
+            setListingImageError();
+            const reader = new FileReader();
+            reader.onerror = () => {
+                resetListingImage();
+                setListingImageError('This photo could not be read. Please choose another image.');
+            };
+            reader.onload = loadEvent => {
+                const sourceImage = new Image();
+                sourceImage.onerror = () => {
+                    resetListingImage();
+                    setListingImageError('This photo could not be opened. Please choose another image.');
+                };
+                sourceImage.onload = () => {
+                    const maxDimension = 900;
+                    const scale = Math.min(1, maxDimension / Math.max(sourceImage.width, sourceImage.height));
+                    const canvas = document.createElement('canvas');
+                    canvas.width = Math.max(1, Math.round(sourceImage.width * scale));
+                    canvas.height = Math.max(1, Math.round(sourceImage.height * scale));
+                    const context = canvas.getContext('2d');
+                    context.fillStyle = '#ffffff';
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+                    context.drawImage(sourceImage, 0, 0, canvas.width, canvas.height);
+                    listingImageDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+
+                    const preview = document.getElementById('cImagePreview');
+                    const prompt = document.getElementById('cImagePrompt');
+                    const actions = document.getElementById('cImageActions');
+                    const fileName = document.getElementById('cImageName');
+                    const uploadLabel = document.getElementById('cImageUploadLabel');
+                    preview.src = listingImageDataUrl;
+                    preview.classList.remove('hidden');
+                    prompt.classList.add('hidden');
+                    actions.classList.remove('hidden');
+                    actions.classList.add('flex');
+                    fileName.textContent = file.name;
+                    uploadLabel.classList.add('border-brand-teal');
+                };
+                sourceImage.src = loadEvent.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
         function handleConsign(e) {
             e.preventDefault();
+            if (isPublishingListing) return;
             const tag = document.querySelector('input[name="lisTag"]:checked').value;
             const title = document.getElementById('cTitle').value.trim();
             const author = document.getElementById('cAuthor').value.trim();
@@ -2735,7 +3446,19 @@
             const description = document.getElementById('cDescription').value.trim();
             const course = document.getElementById('cCourse').value.trim().toUpperCase();
             const price = tag === 'blue' ? 0.00 : parseFloat(document.getElementById('cPrice').value);
-            const category = document.getElementById('cCategory').value;
+            const selectedCategory = document.getElementById('cCategory').value;
+            const selectedLocation = document.getElementById('cLocation').value;
+            const category = selectedCategory === '__other__'
+                ? document.getElementById('cCategoryOther').value.trim()
+                : selectedCategory;
+            const listingLocation = selectedLocation === '__other__'
+                ? document.getElementById('cLocationOther').value.trim()
+                : selectedLocation;
+            if (!listingImageDataUrl) {
+                setListingImageError('Upload a clear photo of the material before publishing.');
+                document.getElementById('cImageUploadLabel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
             const sellerDropoff = tag === 'blue' ? true : document.getElementById('cMeetup').checked;
             const sellerCourier = tag === 'blue' ? true : document.getElementById('cDelivery').checked;
             if (!sellerDropoff && !sellerCourier) {
@@ -2754,11 +3477,11 @@
                 handlingFee: tag === 'blue' ? 35.00 : 0.00,
                 category: category,
                 tag: tag,
-                image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&q=80',
+                image: listingImageDataUrl,
                 isbn: isbn || 'Not provided',
                 description: description,
                 condition: document.getElementById('cCondition').value,
-                location: document.getElementById('cLocation').value,
+                location: listingLocation,
                 seller: tag === 'blue' ? 'BiblioLoop Central Hub (Donated)' : 'You · Community Seller',
                 donor: tag === 'blue' ? (userAccount.isLoggedIn ? userAccount.name : 'Community Donor') : null,
                 priceLabel: priceLabels[tag],
@@ -2767,35 +3490,54 @@
                 meetup: true,
                 delivery: true
             };
+            const listingForm = e.currentTarget;
+            const publishingModal = document.getElementById('publishingModal');
+            const publishingPreviewImage = document.getElementById('publishingPreviewImage');
+            isPublishingListing = true;
+            publishingPreviewImage.src = newItem.image;
+            hideAllModals();
+            publishingModal.classList.remove('publishing-active');
+            void publishingModal.offsetWidth;
+            publishingModal.classList.remove('hidden');
+            publishingModal.classList.add('flex', 'publishing-active');
 
-            resources.unshift(newItem);
+            setTimeout(() => {
+                resources.unshift(newItem);
+                newlyPublishedResourceId = newItem.id;
 
-            if (tag === 'blue') {
-                if (userAccount.isLoggedIn) {
-                    userAccount.biblioCredits += 100;
-                    userAccount.creditHistory.unshift({
-                        id: Date.now(),
-                        type: 'earned',
-                        desc: `Book Donation Reward: "${title.slice(0, 22)}..."`,
-                        amount: 100,
-                        date: 'Just now'
-                    });
-                    updateCreditsDisplay();
+                if (tag === 'blue') {
+                    if (userAccount.isLoggedIn) {
+                        userAccount.biblioCredits += 100;
+                        userAccount.creditHistory.unshift({
+                            id: Date.now(),
+                            type: 'earned',
+                            desc: `Book Donation Reward: "${title.slice(0, 22)}..."`,
+                            amount: 100,
+                            date: 'Just now'
+                        });
+                        updateCreditsDisplay();
+                    }
+                    showToast("Book checked into the Central Hub inventory. +100 Biblio-Credits added!", "🔵");
+                } else {
+                    showToast("Book published. BiblioLoop will request your selected hub transfer after an order is confirmed.", "📚");
                 }
-                showToast("Book checked into the Central Hub inventory. +100 Biblio-Credits added!", "🔵");
-            } else {
-                showToast("Book listed. BiblioLoop will request your selected hub transfer after an order is confirmed.", "📚");
-            }
 
-            saveMarketplaceState();
-            renderDonatedInventory();
-            renderResources();
-            e.target.reset();
-            closeModals();
+                saveMarketplaceState();
+                renderDonatedInventory();
+                listingForm.reset();
+                resetListingImage();
+                toggleCustomListingField('category');
+                toggleCustomListingField('location');
+                isPublishingListing = false;
+                closeModals();
 
-            const allBtn = document.querySelector('.cat-btn:first-child');
-            setCategory('All', allBtn);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+                const allBtn = document.querySelector('.cat-btn:first-child');
+                syncCatalogLocationOptions();
+                setLocationFilter(newItem.location, null);
+                setCategory('All', allBtn);
+                newlyPublishedResourceId = null;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 1300);
         }
 
 
@@ -2815,7 +3557,7 @@
         }
 
         function hideAllModals() {
-            ['cartModal', 'processingModal', 'receiptModal', 'consignModal', 'detailModal', 'chatModal', 'accountCreditsModal'].forEach(id => {
+            ['cartModal', 'processingModal', 'receiptModal', 'consignModal', 'publishingModal', 'detailModal', 'chatModal', 'accountCreditsModal'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {
                     el.classList.add('hidden');
@@ -2842,14 +3584,14 @@
 
         document.getElementById('modalOverlay').addEventListener('click', (e) => {
             if (e.target === document.getElementById('modalOverlay')) {
-                if (document.getElementById('processingModal').classList.contains('hidden')) {
+                if (document.getElementById('processingModal').classList.contains('hidden') && !isPublishingListing) {
                     closeModals();
                 }
             }
         });
 
         document.addEventListener('keydown', event => {
-            if (event.key === 'Escape' && !document.getElementById('modalOverlay').classList.contains('hidden') && document.getElementById('processingModal').classList.contains('hidden')) {
+            if (event.key === 'Escape' && !document.getElementById('modalOverlay').classList.contains('hidden') && document.getElementById('processingModal').classList.contains('hidden') && !isPublishingListing) {
                 closeModals();
             }
         });
