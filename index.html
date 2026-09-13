@@ -1,0 +1,3040 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BiblioLoop is a hybrid student book marketplace and physical hub for buying, selling, renting, trading, donating, and preserving books.">
+    <title>BiblioLoop | Circulating, Not Gatekeeping</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        void: '#07060e',
+                        surface: {
+                            900: '#0c0a19',
+                            850: '#110d24',
+                            800: '#171231',
+                            750: '#1f1940',
+                            700: '#2b2357',
+                        },
+                        brand: {
+                            purple: '#762bb8',
+                            violet: '#8f2fc1',
+                            fuchsia: '#dd2d9b',
+                            teal: '#45b5a2',
+                            plum: '#4a2459',
+                            soft: 'rgba(118, 43, 184, 0.12)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Smooth Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #07060e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2b2357;
+            border-radius: 9999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #dd2d9b;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Calm, high-contrast surfaces */
+        .glass-header {
+            background: rgba(10, 8, 20, 0.97);
+            border-bottom: 1px solid #1f1940;
+        }
+
+        .glass-card {
+            background: #110d24;
+            border: 1px solid #2b2357;
+        }
+
+        .glass-card:hover {
+            border-color: #4b3e83;
+            background: #15112b;
+        }
+
+        .glass-modal {
+            background: #110d24;
+            border: 1px solid #2b2357;
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible,
+        select:focus-visible {
+            outline: 2px solid #45b5a2;
+            outline-offset: 2px;
+        }
+
+        /* Mobile bottom sheet */
+        @media (max-width: 640px) {
+            .mobile-bottom-sheet {
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                top: auto !important;
+                border-bottom-left-radius: 0 !important;
+                border-bottom-right-radius: 0 !important;
+                max-height: 90vh !important;
+                border-top: 1px solid rgba(221, 45, 155, 0.3) !important;
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-void text-gray-200 min-h-screen font-sans overflow-x-hidden relative selection:bg-brand-violet/40 selection:text-white pb-20 md:pb-8">
+
+    <!-- ================= HEADER NAVIGATION ================= -->
+    <header class="fixed top-0 inset-x-0 glass-header z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+
+                <!-- Logo & Brand (Clean & Direct) -->
+                <div class="flex items-center gap-3 cursor-pointer select-none" onclick="returnToCatalog()">
+                    <div class="w-11 h-11 rounded-full bg-white flex-shrink-0 overflow-hidden">
+                        <img src="./Logo/BiblioLoop.png" alt="BiblioLoop Logo"
+                            class="w-full h-full object-contain rounded-full">
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span
+                                class="text-lg font-display font-extrabold text-white tracking-tight">BiblioLoop</span>
+                        </div>
+                        <span class="hidden sm:block text-[10px] text-gray-500">Circulating, not gatekeeping</span>
+                    </div>
+                </div>
+
+                <nav class="hidden lg:flex items-center gap-6 text-xs font-medium text-gray-400" aria-label="Primary navigation">
+                    <button type="button" onclick="scrollToSection('catalogStart')" class="hover:text-white transition-colors">Browse</button>
+                    <button type="button" onclick="scrollToSection('howItWorks')" class="hover:text-white transition-colors">How it works</button>
+                    <button type="button" onclick="scrollToSection('physicalHub')" class="hover:text-white transition-colors">Physical hub</button>
+                </nav>
+
+                <!-- Desktop Action Buttons (No Mobile Duplication) -->
+                <div class="hidden md:flex items-center gap-3">
+
+                    <!-- Student account and credits -->
+                    <div id="desktopUserAccountArea">
+                        <button id="navProfileBtn" onclick="openBiblioCreditsModal()"
+                            class="inline-flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl text-xs text-gray-300 hover:text-white bg-surface-850 hover:bg-surface-800 border border-surface-700/80 transition-all"
+                            title="Open your account and credits">
+                            <div id="userAvatarCircle"
+                                class="w-7 h-7 rounded-full bg-gradient-to-tr from-brand-purple to-brand-fuchsia text-[10px] font-bold text-white flex items-center justify-center">
+                                JN</div>
+                            <span id="userDisplayName" class="hidden lg:inline font-semibold">Jhazmin Nepomuceno</span>
+                            <span class="hidden lg:block h-4 w-px bg-surface-700"></span>
+                            <span id="navCreditsAmount" class="font-mono font-bold text-brand-teal">₱350.00</span>
+                        </button>
+                    </div>
+
+                    <button type="button" onclick="toggleConsignModal()"
+                        class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-white bg-brand-violet hover:bg-purple-600 transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        <span>Share a book</span>
+                    </button>
+
+                    <!-- Cart Button (Desktop only) -->
+                    <button onclick="toggleCartModal()"
+                        class="relative p-2.5 rounded-xl bg-surface-850 hover:bg-surface-800 border border-surface-700/80 text-gray-300 hover:text-white transition-all"
+                        title="View Book Bag">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        </svg>
+                        <span id="desktopCartBadge"
+                            class="absolute -top-1.5 -right-1.5 bg-brand-violet text-white text-[10px] font-bold rounded-full h-5 min-w-[20px] px-1 flex items-center justify-center border border-surface-900">0</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= MAIN CONTENT WRAPPER ================= -->
+    <main class="relative z-10 pt-20 sm:pt-24 max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
+
+        <!-- ================= 1. COMMUNITY BOOK MARKETPLACE ================= -->
+        <section id="storefrontView" class="block">
+
+            <!-- Owner Catalog Mode Alert (Active only when Owner enables Catalog Preview) -->
+            <div id="ownerCatalogBanner"
+                class="hidden mb-4 p-3 rounded-2xl bg-blue-950/50 border border-blue-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-lg">
+                <div class="flex items-center gap-2.5 text-blue-200">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-400 animate-pulse flex-shrink-0"></span>
+                    <span><strong>Owner Catalog Mode:</strong> Hub inventory and operational donation details are highlighted for review.</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="exitOwnerCatalogPreview()"
+                        class="px-3 py-1.5 rounded-xl bg-surface-800 hover:bg-surface-750 text-gray-300 hover:text-white text-[11px] font-medium border border-surface-700 whitespace-nowrap transition-colors">
+                        Exit to Member View
+                    </button>
+                </div>
+            </div>
+
+            <!-- Student-focused catalog introduction -->
+            <div class="py-10 sm:py-16 text-center max-w-3xl mx-auto">
+                <p class="text-sm font-medium text-violet-300 mb-3">Affordable books from students and the BiblioLoop Hub</p>
+                <h1 class="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight leading-tight">
+                    Find the book you need.
+                </h1>
+                <p class="text-sm sm:text-base text-gray-400 max-w-xl mx-auto leading-relaxed mt-3">
+                    Search textbooks, reviewers, novels, and manga available to buy, rent, swap, or receive as a donation.
+                </p>
+
+                <div id="catalogStart" class="relative w-full scroll-mt-24 mt-7 text-left">
+                    <label for="searchInput" class="sr-only">Search books</label>
+                    <div class="flex items-center w-full h-14 rounded-xl bg-surface-850 border border-surface-700 focus-within:border-violet-400 overflow-hidden transition-colors">
+                        <div class="pl-4 pr-3 text-gray-400">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <input class="peer h-full w-full outline-none text-sm text-white bg-transparent placeholder-gray-500 pr-3"
+                            type="text" id="searchInput" placeholder="Search title, author, ISBN, subject, or course"
+                            onkeyup="filterResources()" />
+                        <button id="clearSearchBtn" onclick="clearSearch()" aria-label="Clear search"
+                            class="hidden mr-2 p-2 text-gray-500 hover:text-gray-300">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-center gap-4 mt-4 text-xs">
+                    <button type="button" onclick="toggleConsignModal()" class="font-semibold text-violet-300 hover:text-white transition-colors">Share a book</button>
+                    <span class="w-px h-3 bg-surface-700"></span>
+                    <button type="button" onclick="scrollToSection('howItWorks')" class="text-gray-400 hover:text-white transition-colors">How BiblioLoop works</button>
+                </div>
+            </div>
+
+            <!-- Catalog controls -->
+            <div class="mb-6 pb-5 border-b border-surface-750">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
+                    <div>
+                        <h2 class="text-xl font-display font-bold text-white">Available books</h2>
+                        <p id="catalogResultCount" class="text-xs text-gray-500 mt-1"></p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label for="catalogLocationSelect" class="text-xs text-gray-500">Location</label>
+                        <div class="relative">
+                            <select id="catalogLocationSelect" aria-label="Choose your location" onchange="updateUserLocation(this.value)"
+                                class="appearance-none min-w-[140px] bg-surface-850 text-gray-200 border border-surface-700 rounded-lg pl-3 pr-8 py-2 text-xs font-medium focus:outline-none cursor-pointer">
+                                <option value="" disabled class="bg-surface-850 text-gray-400">Choose a city</option>
+                                <option class="bg-surface-850 text-white">Davao City</option>
+                                <option class="bg-surface-850 text-white">Quezon City</option>
+                                <option class="bg-surface-850 text-white">Manila</option>
+                                <option class="bg-surface-850 text-white">Makati</option>
+                                <option class="bg-surface-850 text-white">Cebu City</option>
+                                <option class="bg-surface-850 text-white">Baguio City</option>
+                            </select>
+                            <svg class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                        <button id="allLocationsBtn" type="button" aria-pressed="false" onclick="setLocationFilter('All', this)"
+                            class="location-btn px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-colors bg-transparent text-gray-400 hover:text-white border border-surface-700">
+                            All cities
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar" id="categoryTabs">
+                    <button
+                        class="cat-btn active px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors bg-brand-violet text-white border border-brand-purple/40"
+                        onclick="setCategory('All', this)">All</button>
+                    <button
+                        class="cat-btn px-3.5 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-colors bg-surface-850 text-gray-400 hover:text-white border border-surface-700/60"
+                        onclick="setCategory('Fiction', this)">Fiction</button>
+                    <button
+                        class="cat-btn px-3.5 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-colors bg-surface-850 text-gray-400 hover:text-white border border-surface-700/60"
+                        onclick="setCategory('Non-Fiction', this)">Non-Fiction</button>
+                    <button
+                        class="cat-btn px-3.5 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-colors bg-surface-850 text-gray-400 hover:text-white border border-surface-700/60"
+                        onclick="setCategory('Manga', this)">Manga</button>
+                    <button
+                        class="cat-btn px-3.5 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-colors bg-surface-850 text-gray-400 hover:text-white border border-surface-700/60"
+                        onclick="setCategory('Textbooks', this)">Textbooks</button>
+                    <button
+                        class="cat-btn px-3.5 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-colors bg-surface-850 text-gray-400 hover:text-white border border-surface-700/60"
+                        onclick="setCategory('Reviewers', this)">Reviewers</button>
+                    <button
+                        class="cat-btn px-3.5 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-colors bg-surface-850 text-gray-400 hover:text-white border border-surface-700/60"
+                        onclick="setCategory('BLIS', this)">Library Science</button>
+                </div>
+            </div>
+
+            <!-- Resource Grid -->
+            <div id="resourceGrid"
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+                <!-- Injected via JavaScript -->
+            </div>
+
+            <div id="showMoreWrap" class="hidden text-center mt-7">
+                <button id="showMoreBtn" type="button" onclick="showMoreResources()" class="px-5 py-2.5 rounded-lg bg-surface-850 hover:bg-surface-800 border border-surface-700 text-sm font-semibold text-gray-200 transition-colors">Show more books</button>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState"
+                class="hidden text-center py-16 px-4 glass-card rounded-2xl border border-surface-700/50 my-6">
+                <div
+                    class="w-12 h-12 bg-surface-800 rounded-full flex items-center justify-center mx-auto mb-3 border border-surface-700 text-gray-400">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                        </path>
+                    </svg>
+                </div>
+                <h3 class="text-sm font-bold text-white mb-1">No books matched your search</h3>
+                <p class="text-xs text-gray-400 max-w-xs mx-auto mb-4">Try another title, author, subject, ISBN, or
+                    location.</p>
+                <button onclick="clearSearchAndFilters()"
+                    class="px-4 py-1.5 rounded-lg text-xs font-semibold text-brand-fuchsia bg-brand-purple/15 border border-brand-purple/30 hover:bg-brand-purple/25">
+                    View All Books
+                </button>
+            </div>
+
+            <!-- How the hybrid loop works -->
+            <section id="howItWorks" class="scroll-mt-24 mt-16 sm:mt-20 border-t border-surface-750 pt-12 sm:pt-16">
+                <div class="text-center max-w-xl mx-auto">
+                    <h2 class="text-2xl sm:text-3xl font-display font-bold text-white">How it works</h2>
+                    <p class="text-sm text-gray-400 leading-relaxed mt-2">A straightforward way to find a book and receive it safely.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-0 mt-8 border border-surface-700 rounded-xl overflow-hidden">
+                    <article class="p-5 sm:p-6 bg-surface-850 border-b lg:border-b-0 md:border-r border-surface-700">
+                        <span class="text-xs font-bold text-violet-300">1</span>
+                        <h3 class="text-sm font-semibold text-white mt-3">Search and compare</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed mt-1.5">Find the exact edition using the title, author, ISBN, subject, or course.</p>
+                    </article>
+                    <article class="p-5 sm:p-6 bg-surface-850 border-b lg:border-b-0 lg:border-r border-surface-700">
+                        <span class="text-xs font-bold text-violet-300">2</span>
+                        <h3 class="text-sm font-semibold text-white mt-3">Reserve your book</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed mt-1.5">Review the details, then choose hub pickup or delivery at checkout.</p>
+                    </article>
+                    <article class="p-5 sm:p-6 bg-surface-850 border-b md:border-b-0 md:border-r border-surface-700">
+                        <span class="text-xs font-bold text-violet-300">3</span>
+                        <h3 class="text-sm font-semibold text-white mt-3">Seller sends it to the hub</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed mt-1.5">For seller-held books, the seller drops it off or sends it by courier. No buyer meetup is required.</p>
+                    </article>
+                    <article class="p-5 sm:p-6 bg-surface-850">
+                        <span class="text-xs font-bold text-violet-300">4</span>
+                        <h3 class="text-sm font-semibold text-white mt-3">Receive it safely</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed mt-1.5">After hub verification, collect it with your QR pass or wait for delivery.</p>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Dual inventory and Biblio-Credits -->
+            <section class="grid lg:grid-cols-2 gap-4 mt-10 sm:mt-12">
+                <article class="rounded-xl bg-surface-850 border border-surface-700 p-5 sm:p-6">
+                    <p class="text-xs font-semibold text-violet-300">Where books are kept</p>
+                    <h2 class="text-lg font-display font-bold text-white mt-1.5">Seller-held and hub-ready inventory</h2>
+                    <div class="space-y-4 mt-6">
+                        <div class="flex gap-3">
+                            <span class="mt-1 w-2 h-2 rounded-full bg-violet-400 flex-shrink-0"></span>
+                            <div><h3 class="text-sm font-semibold text-white">Seller-held</h3><p class="text-xs text-gray-400 leading-relaxed mt-1">The owner keeps the book until an order is confirmed.</p></div>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="mt-1 w-2 h-2 rounded-full bg-brand-teal flex-shrink-0"></span>
+                            <div><h3 class="text-sm font-semibold text-white">Ready at the hub</h3><p class="text-xs text-gray-400 leading-relaxed mt-1">The book is already checked and available for faster pickup.</p></div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="rounded-xl bg-surface-850 border border-surface-700 p-5 sm:p-6">
+                    <p class="text-xs font-semibold text-violet-300">Biblio-Credits</p>
+                    <h2 class="text-lg font-display font-bold text-white mt-1.5">Trade books for future value</h2>
+                    <p class="text-xs text-gray-400 leading-relaxed mt-3">Earn credits by trading in or donating useful books. Use them for books, rentals, printing, binding, and repairs.</p>
+                    <button type="button" onclick="openBiblioCreditsModal()" class="mt-5 px-4 py-2 rounded-lg bg-brand-violet hover:bg-purple-600 text-white text-xs font-semibold transition-colors">View credits</button>
+                </article>
+            </section>
+
+            <!-- Physical hub -->
+            <section id="physicalHub" class="scroll-mt-24 mt-16 sm:mt-20 rounded-xl border border-surface-700 bg-surface-850 p-5 sm:p-8">
+                <div class="grid lg:grid-cols-[.8fr_1.2fr] gap-8">
+                    <div>
+                        <p class="text-xs font-semibold text-violet-300">BiblioLoop Physical Hub</p>
+                        <h2 class="text-2xl sm:text-3xl font-display font-bold text-white mt-2">One reliable place for book handoffs and student services</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed mt-3">An independent hub near student and commercial districts—open to learners from any university or community.</p>
+                        <div class="mt-5 pt-5 border-t border-surface-700">
+                            <p class="text-xs text-gray-500">Hub address</p>
+                            <p class="text-sm font-semibold text-white mt-1">Somewhere St., Davao City</p>
+                            <a href="mailto:ione@biblioloop.com" class="inline-block text-xs text-violet-300 hover:text-white mt-2">ione@biblioloop.com</a>
+                        </div>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 gap-3">
+                        <article class="rounded-lg bg-surface-900 border border-surface-700 p-4"><h3 class="text-sm font-semibold text-white">Verified drop-off and pickup</h3><p class="text-xs text-gray-400 leading-relaxed mt-1">Use the hub instead of meeting strangers directly.</p></article>
+                        <article class="rounded-lg bg-surface-900 border border-surface-700 p-4"><h3 class="text-sm font-semibold text-white">Document printing</h3><p class="text-xs text-gray-400 leading-relaxed mt-1">Print class materials, reviewers, forms, and requirements.</p></article>
+                        <article class="rounded-lg bg-surface-900 border border-surface-700 p-4"><h3 class="text-sm font-semibold text-white">Binding and book repair</h3><p class="text-xs text-gray-400 leading-relaxed mt-1">Thesis binding, cover mending, page repair, and protective covers.</p></article>
+                        <article class="rounded-lg bg-surface-900 border border-surface-700 p-4"><h3 class="text-sm font-semibold text-white">Quiet reading lounge</h3><p class="text-xs text-gray-400 leading-relaxed mt-1">A calm place to study or read store copies.</p></article>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vision and mission -->
+            <section id="aboutBiblioLoop" class="scroll-mt-24 mt-16 sm:mt-20 mb-12 sm:mb-20">
+                <div class="text-center max-w-2xl mx-auto">
+                    <p class="text-xs font-semibold text-violet-300">About BiblioLoop</p>
+                    <h2 class="text-2xl sm:text-3xl font-display font-bold text-white mt-2">Circulating, not gatekeeping</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4 mt-7">
+                    <article class="glass-card rounded-xl p-5 sm:p-6"><p class="text-xs font-semibold text-violet-300">Vision</p><p class="text-sm text-gray-300 leading-relaxed mt-3">To establish a world where literature and knowledge flow without limits, inspiring connected communities through the sustainable circulation of shared resources.</p></article>
+                    <article class="glass-card rounded-xl p-5 sm:p-6"><p class="text-xs font-semibold text-violet-300">Mission</p><p class="text-sm text-gray-300 leading-relaxed mt-3">To enrich lives and democratize access to learning by providing an integrated physical and digital ecosystem that simplifies how books are shared, preserved, and valued.</p></article>
+                </div>
+                <footer class="mt-10 pt-6 border-t border-surface-750 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-gray-500">
+                    <p>© 2026 BiblioLoop · Presented by Jhazmin E. Nepomuceno</p>
+                    <div class="flex items-center gap-4"><a href="mailto:ione@biblioloop.com" class="hover:text-white">Contact</a><span title="Copyright policies are still to be announced">Copyright · TBA</span><button type="button" onclick="toggleAdminMode()" class="hover:text-white">Owner dashboard</button></div>
+                </footer>
+            </section>
+        </section>
+
+        <!-- ================= 2. OWNER FINANCIAL & CIRCULATION ANALYTICS ================= -->
+        <section id="adminView" class="hidden">
+            <div
+                class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-surface-750">
+                <div>
+                    <span
+                        class="text-[11px] font-semibold text-brand-fuchsia bg-brand-purple/15 px-2 py-0.5 rounded border border-brand-purple/30">OWNER
+                        DASHBOARD</span>
+                    <h2 class="text-xl sm:text-2xl font-display font-extrabold text-white mt-1">Circulation & Revenue
+                        Analytics</h2>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span
+                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Live Ledger
+                    </span>
+                    <button onclick="toggleAdminMode()"
+                        class="px-3 py-1 rounded-lg bg-surface-800 text-xs text-gray-300 hover:text-white border border-surface-700">
+                        Back to Catalog
+                    </button>
+                </div>
+            </div>
+
+            <!-- Financial Metric Cards (Organized Grid) -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-6">
+
+                <div class="glass-card p-4 rounded-xl border-l-4 border-l-brand-purple">
+                    <p class="text-[11px] text-gray-400 font-medium uppercase tracking-wider mb-1">Total Platform
+                        Turnover</p>
+                    <h3 class="text-xl sm:text-2xl font-bold font-display text-white">₱68,450.00</h3>
+                    <p class="text-[10px] text-emerald-400 font-medium mt-1">Across 320 active items</p>
+                </div>
+
+                <div class="glass-card p-4 rounded-xl border-l-4 border-l-brand-fuchsia">
+                    <p class="text-[11px] text-gray-400 font-medium uppercase tracking-wider mb-1">Marketplace
+                        Commissions</p>
+                    <h3 class="text-xl sm:text-2xl font-bold font-display text-white">₱4,120.00</h3>
+                    <p class="text-[10px] text-gray-400 mt-1">5% - 8% micro-transaction cut</p>
+                </div>
+
+                <div class="glass-card p-4 rounded-xl border-l-4 border-l-blue-500">
+                    <p class="text-[11px] text-gray-400 font-medium uppercase tracking-wider mb-1">Donated Book Handling
+                        Revenue
+                    </p>
+                    <h3 id="ownerDonatedRevenueStat" class="text-xl sm:text-2xl font-bold font-display text-white">
+                        ₱4,250.00</h3>
+                    <p class="text-[10px] text-blue-400 font-semibold mt-1">100% Platform Income (₱35/book handling fee)
+                    </p>
+                </div>
+
+                <div class="glass-card p-4 rounded-xl border-l-4 border-l-amber-500">
+                    <p class="text-[11px] text-gray-400 font-medium uppercase tracking-wider mb-1">Rental Deposits &
+                        Fees</p>
+                    <h3 class="text-xl sm:text-2xl font-bold font-display text-white">₱3,450.00</h3>
+                    <p class="text-[10px] text-gray-400 mt-1">Semester textbook loans</p>
+                </div>
+
+                <div class="glass-card p-4 rounded-xl border-l-4 border-l-purple-400">
+                    <p class="text-[11px] text-gray-400 font-medium uppercase tracking-wider mb-1">Micro-Services</p>
+                    <h3 class="text-xl sm:text-2xl font-bold font-display text-white">₱2,850.00</h3>
+                    <p class="text-[10px] text-gray-400 mt-1">Hardbound thesis, repair, printing</p>
+                </div>
+
+                <div class="glass-card p-4 rounded-xl border-l-4 border-l-emerald-500">
+                    <p class="text-[11px] text-gray-400 font-medium uppercase tracking-wider mb-1">Partner Publisher Ads
+                    </p>
+                    <h3 class="text-xl sm:text-2xl font-bold font-display text-white">₱4,500.00</h3>
+                    <p class="text-[10px] text-gray-400 mt-1">Review centers & bookstores</p>
+                </div>
+            </div>
+
+            <!-- Ledger Table -->
+            <div class="glass-card rounded-xl overflow-hidden border border-surface-700/60">
+                <div class="p-4 border-b border-surface-750">
+                    <h3 class="text-sm font-bold text-white">Recent Community Marketplace Payouts</h3>
+                    <p class="text-xs text-gray-400">Automated micro-cut & handling fee distribution</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm">
+                        <thead class="bg-surface-850 text-gray-400 text-[11px] uppercase border-b border-surface-750">
+                            <tr>
+                                <th class="py-2.5 px-4">Tx ID</th>
+                                <th class="py-2.5 px-4">Tag</th>
+                                <th class="py-2.5 px-4">Book Listing</th>
+                                <th class="py-2.5 px-4 text-right">Amount</th>
+                                <th class="py-2.5 px-4 text-right">Platform Cut</th>
+                                <th class="py-2.5 px-4 text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-surface-750/50 text-gray-300">
+                            <tr class="hover:bg-surface-800/40 transition-colors">
+                                <td class="py-2.5 px-4 font-mono text-gray-400">#TX-8102</td>
+                                <td class="py-2.5 px-4"><span
+                                        class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">For
+                                        Sale</span></td>
+                                <td class="py-2.5 px-4 text-white font-medium truncate max-w-[180px]">Stewart Calculus
+                                    8th Ed.</td>
+                                <td class="py-2.5 px-4 text-right font-mono">₱280.00</td>
+                                <td class="py-2.5 px-4 text-right font-mono text-brand-fuchsia font-semibold">+₱14.00
+                                    (5%)</td>
+                                <td class="py-2.5 px-4 text-center text-emerald-400 text-xs">Completed</td>
+                            </tr>
+                            <tr class="hover:bg-surface-800/40 transition-colors">
+                                <td class="py-2.5 px-4 font-mono text-gray-400">#TX-8101</td>
+                                <td class="py-2.5 px-4"><span
+                                        class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/15 text-red-400 border border-red-500/30">For
+                                        Rent</span></td>
+                                <td class="py-2.5 px-4 text-white font-medium truncate max-w-[180px]">Campbell Biology
+                                    12th Ed.</td>
+                                <td class="py-2.5 px-4 text-right font-mono">₱150.00</td>
+                                <td class="py-2.5 px-4 text-right font-mono text-brand-fuchsia font-semibold">+₱12.00
+                                    (8%)</td>
+                                <td class="py-2.5 px-4 text-center text-emerald-400 text-xs">Completed</td>
+                            </tr>
+                            <tr class="hover:bg-surface-800/40 transition-colors">
+                                <td class="py-2.5 px-4 font-mono text-gray-400">#TX-8100</td>
+                                <td class="py-2.5 px-4"><span
+                                        class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/15 text-blue-400 border border-blue-500/30">Donated</span>
+                                </td>
+                                <td class="py-2.5 px-4 text-white font-medium truncate max-w-[180px]">PRC LET Licensure
+                                    Reviewer (Hub Delivery)</td>
+                                <td class="py-2.5 px-4 text-right font-mono text-emerald-400">₱0.00 (FREE)</td>
+                                <td class="py-2.5 px-4 text-right font-mono text-blue-400 font-semibold">+₱35.00 (100%
+                                    Fee)
+                                </td>
+                                <td class="py-2.5 px-4 text-center text-blue-400 text-xs">Dispatched</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ================= 3. DONATED EDUCATIONAL RESOURCES (OWNER-ONLY VAULT) ================= -->
+            <div class="glass-card rounded-xl overflow-hidden border border-blue-500/30 mt-6 shadow-xl">
+                <div
+                    class="p-4 sm:p-5 border-b border-surface-750 bg-blue-950/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/40 uppercase tracking-wider">Central
+                                Hub Vault · Exclusive</span>
+                            <span class="text-[10px] text-gray-400">In-Hub Display Inventory</span>
+                        </div>
+                        <h3 class="text-base sm:text-lg font-bold font-display text-white mt-1">Donated Educational
+                            Resources Vault</h3>
+                        <p class="text-xs text-gray-300 max-w-xl leading-relaxed">
+                            Donated books are provided free of charge to students. The platform charges a standard
+                            ₱35.00 hub handling fee to fund central warehousing, quality sanitization, and packaging.
+                            Available for verified hub pickup or delivery after reservation.
+                        </p>
+                    </div>
+
+                    <div
+                        class="flex items-center gap-4 bg-surface-900/80 px-4 py-2.5 rounded-xl border border-surface-750 self-start sm:self-auto">
+                        <div>
+                            <p class="text-[9px] text-gray-400 uppercase font-medium">Potential Fee Yield</p>
+                            <p id="ownerDonatedTotalValue"
+                                class="text-sm sm:text-base font-mono font-bold text-blue-400">₱0.00</p>
+                        </div>
+                        <div class="w-px h-7 bg-surface-750"></div>
+                        <div>
+                            <p class="text-[9px] text-gray-400 uppercase font-medium">Hub Stock</p>
+                            <p id="ownerDonatedCount" class="text-sm sm:text-base font-mono font-bold text-white">0 in
+                                stock</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Donated Resources Grid/List (Owner Only) -->
+                <div id="ownerDonatedGrid" class="p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Populated dynamically via JavaScript with tag === 'blue' items -->
+                </div>
+
+                <!-- Owner Storefront Preview Controls -->
+                <div
+                    class="p-3 sm:p-4 bg-surface-850/80 border-t border-surface-750 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                    <div class="flex items-center gap-2 text-gray-300">
+                        <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                        <span class="text-gray-400">Catalog Preview:</span>
+                        <span id="ownerPreviewStatusText" class="text-gray-300 font-medium">Member Catalog (Hub stock is available to reserve)</span>
+                    </div>
+                    <button type="button" onclick="toggleOwnerCatalogPreview()" id="ownerPreviewToggleBtn"
+                        class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/40 transition-all flex items-center gap-1.5 shadow-sm">
+                        <svg class="w-3.5 h-3.5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        <span>Preview Storefront as Owner</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= MOBILE APP NAVIGATION BAR ================= -->
+    <!-- Serves as the clean mobile controller, eliminating header button duplication -->
+    <nav class="fixed bottom-0 inset-x-0 glass-header md:hidden z-40 px-3 py-2 border-t border-surface-750">
+        <div class="flex items-center justify-around">
+            <button onclick="returnToCatalog()"
+                class="flex flex-col items-center gap-0.5 text-brand-fuchsia focus:outline-none">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                    </path>
+                </svg>
+                <span class="text-[10px] font-semibold">Browse</span>
+            </button>
+
+            <!-- Mobile Credits Button (Visible to all users with accounts) -->
+            <button onclick="openBiblioCreditsModal()"
+                class="flex flex-col items-center gap-0.5 text-gray-400 hover:text-brand-teal focus:outline-none">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6c4.418 0 8-1.343 8-3s-3.582-3-8-3-8 1.343-8 3 3.582 3 8 3zm8-3v6c0 1.657-3.582 3-8 3S4 10.657 4 9V3m16 6v6c0 1.657-3.582 3-8 3s-8-1.343-8-3V9" transform="translate(0 3) scale(1 .85)"></path></svg>
+                <span class="text-[10px] font-medium text-gray-300">Credits</span>
+            </button>
+
+            <button onclick="toggleConsignModal()"
+                class="flex flex-col items-center gap-0.5 text-gray-400 hover:text-white focus:outline-none">
+                <div
+                    class="w-7 h-7 rounded-full bg-brand-violet text-white flex items-center justify-center -mt-2 border border-brand-purple/40">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4">
+                        </path>
+                    </svg>
+                </div>
+                <span class="text-[10px] font-medium text-gray-300">Share</span>
+            </button>
+
+            <button onclick="toggleCartModal()"
+                class="flex flex-col items-center gap-0.5 text-gray-400 hover:text-white relative focus:outline-none">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                <span class="text-[10px] font-medium">Bag</span>
+                <span id="mobileBottomCartDot"
+                    class="hidden absolute -top-1 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-fuchsia text-white text-[9px] font-bold items-center justify-center border border-surface-900">0</span>
+            </button>
+
+            <button onclick="scrollToSection('physicalHub')"
+                class="flex flex-col items-center gap-0.5 text-gray-400 hover:text-white focus:outline-none">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6M8 10h.01M12 10h.01M16 10h.01">
+                    </path>
+                </svg>
+                <span class="text-[10px] font-medium">Hub</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ================= MODALS & OVERLAYS ================= -->
+    <div id="modalOverlay"
+        class="fixed inset-0 bg-void/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4 opacity-0 transition-opacity duration-200">
+
+        <!-- MODAL 1: CHECKOUT & CART MODAL -->
+        <div id="cartModal"
+            class="glass-modal mobile-bottom-sheet w-full max-w-md rounded-2xl sm:rounded-3xl p-5 sm:p-6 hidden flex-col shadow-2xl border border-surface-700 max-h-[92vh] overflow-hidden relative">
+
+            <div class="w-10 h-1 rounded-full bg-surface-700 mx-auto mb-3 sm:hidden"></div>
+
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-surface-750">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full overflow-hidden bg-white flex-shrink-0">
+                        <img src="./Logo/BiblioLoop.png" alt="BiblioLoop"
+                            class="w-full h-full object-contain rounded-full">
+                    </div>
+                    <div><h3 class="text-base font-bold font-display text-white">Review your reservation</h3><p class="text-[11px] text-gray-500">Nothing is reserved until you confirm.</p></div>
+                </div>
+                <button onclick="closeModals()"
+                    class="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-surface-800">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Items List -->
+            <div id="cartItemsList" class="flex-1 overflow-y-auto max-h-[36vh] space-y-2.5 pr-1 no-scrollbar mb-4">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Price Breakdown -->
+            <div id="checkoutBreakdown" class="hidden flex-col border-t border-surface-750 pt-3">
+                <div class="bg-surface-850 rounded-xl p-3 border border-surface-700/60 mb-3 space-y-2 text-xs">
+                    <div class="flex justify-between text-gray-300">
+                        <span>Books Subtotal</span>
+                        <span id="cartSubtotal" class="font-mono font-medium text-white">₱0.00</span>
+                    </div>
+                    <!-- Dedicated Donated Hub Handling Fee Row -->
+                    <div id="donatedFeeRow"
+                        class="hidden justify-between items-center text-blue-300 bg-blue-950/40 p-2 rounded-lg border border-blue-500/30">
+                        <div>
+                            <span class="block font-semibold text-white">Donated Hub Handling Fee</span>
+                            <span id="donatedFeeCountLabel" class="text-[9px] text-blue-300 block">100% Platform Income
+                                · Hub Warehousing</span>
+                        </div>
+                        <span id="donatedFeeTotal" class="font-mono font-bold text-blue-400">₱0.00</span>
+                    </div>
+                    <div id="deliveryFeeRow" class="hidden justify-between text-gray-400">
+                        <span>Delivery</span>
+                        <span class="font-mono text-gray-300">₱75.00</span>
+                    </div>
+                    <div
+                        class="flex justify-between items-center text-sm font-bold text-white pt-2 border-t border-surface-700/70">
+                        <span>Total Amount</span>
+                        <span id="cartTotal" class="font-mono text-brand-fuchsia text-base">₱0.00</span>
+                    </div>
+                </div>
+
+                <!-- Central Hub handling notice for donated items -->
+                <div id="cartDonatedNotice"
+                    class="hidden p-2.5 rounded-xl bg-blue-950/40 border border-blue-500/40 text-[11px] text-blue-200 flex items-start gap-2 mb-3">
+                    <div>
+                        <p class="font-semibold text-white text-[11px]">Already at the hub</p>
+                        <p class="text-[9px] text-blue-300 leading-tight">Your bag includes donated educational
+                            resource(s) already held by BiblioLoop. Choose verified hub pickup or delivery.</p>
+                    </div>
+                </div>
+
+                <p class="text-xs font-semibold text-white mb-2">Receive your books</p>
+                <div class="grid grid-cols-2 gap-2 mb-3">
+                    <button type="button" data-fulfillment="meetup"
+                        class="fulfillment-method border-brand-teal bg-brand-teal/10 text-white p-2.5 rounded-xl border text-left transition-all"
+                        onclick="selectFulfillment('meetup', this)">
+                        <span class="block text-xs font-bold">Hub Pickup</span>
+                        <span class="block text-[9px] text-gray-400 mt-0.5">Collect with your secure QR pass</span>
+                    </button>
+                    <button id="deliveryFulfillmentBtn" type="button" data-fulfillment="delivery"
+                        class="fulfillment-method border-surface-700 bg-surface-850 text-gray-300 p-2.5 rounded-xl border text-left transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                        onclick="selectFulfillment('delivery', this)">
+                        <span class="block text-xs font-bold">Delivery</span>
+                        <span class="block text-[9px] text-gray-400 mt-0.5">Delivered to your address · ₱75</span>
+                    </button>
+                </div>
+                <p class="text-[10px] text-gray-500 leading-relaxed mb-3">For seller-held books, the seller transfers the book to BiblioLoop after confirmation. Buyers and sellers do not need to meet directly.</p>
+                <div id="deliveryAddressWrap" class="hidden mb-3">
+                    <label for="deliveryAddress" class="block text-[11px] font-semibold text-gray-400 mb-1">Delivery
+                        address</label>
+                    <textarea id="deliveryAddress" rows="2"
+                        class="w-full bg-surface-850 border border-surface-700 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-brand-teal"
+                        placeholder="House/unit, street, barangay, city"></textarea>
+                    <p class="text-[9px] text-gray-500 mt-1">Your full address is kept inside this order and is not
+                        shown on the public listing.</p>
+                </div>
+
+                <!-- Payment Channels in PH -->
+                <p class="text-xs font-semibold text-white mb-2">Payment</p>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+                    <button
+                        class="pay-method active p-2 rounded-xl border border-brand-purple bg-brand-purple/15 text-center text-xs font-semibold text-white transition-all"
+                        onclick="selectPayment(this, 'gcash')">
+                        GCash / Maya
+                    </button>
+                    <button
+                        class="pay-method p-2 rounded-xl border border-surface-700 bg-surface-850 text-center text-xs font-semibold text-gray-300 hover:text-white transition-all"
+                        onclick="selectPayment(this, 'card')">
+                        Card
+                    </button>
+                    <button
+                        class="pay-method p-2 rounded-xl border border-surface-700 bg-surface-850 text-center text-xs font-semibold text-gray-300 hover:text-white transition-all"
+                        onclick="selectPayment(this, 'credits')">
+                        Credits
+                    </button>
+                    <button
+                        class="pay-method p-2 rounded-xl border border-surface-700 bg-surface-850 text-center text-xs font-semibold text-gray-300 hover:text-white transition-all"
+                        onclick="selectPayment(this, 'hub')">
+                        Pay at hub
+                    </button>
+                </div>
+
+                <!-- Biblio Credits Dynamic Info Box -->
+                <div id="creditsPaymentInfo"
+                    class="hidden mb-3 p-3 rounded-xl bg-brand-purple/15 border border-brand-purple/30 text-xs">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-gray-300 font-medium">Available Biblio Credits:</span>
+                        <span id="checkoutAvailableCredits" class="font-mono font-bold text-brand-teal">₱350.00</span>
+                    </div>
+                    <p id="creditsPaymentStatus" class="text-[10px] text-gray-400 leading-normal">
+                        Select Confirm Order to redeem your Biblio Credits.
+                    </p>
+                </div>
+
+                <button onclick="processCheckout()"
+                    class="w-full py-3 rounded-xl bg-brand-violet hover:bg-purple-600 text-white font-bold text-sm transition-colors">
+                    Confirm reservation
+                </button>
+            </div>
+        </div>
+
+        <!-- MODAL 2: PROCESSING STATE -->
+        <div id="processingModal"
+            class="glass-modal w-full max-w-xs rounded-2xl p-6 hidden flex-col items-center justify-center text-center shadow-2xl border border-surface-700">
+            <div class="w-10 h-10 rounded-full border-2 border-surface-750 border-t-brand-purple animate-spin mb-3">
+            </div>
+            <h4 class="text-sm font-bold text-white mb-1">Confirming your reservation...</h4>
+            <p class="text-xs text-gray-400">Notifying the seller and preparing the hub handoff.</p>
+        </div>
+
+        <!-- MODAL 3: RECEIPT & QR CODE -->
+        <div id="receiptModal"
+            class="glass-modal mobile-bottom-sheet w-full max-w-sm rounded-2xl sm:rounded-3xl p-5 sm:p-6 hidden flex-col items-center text-center shadow-2xl border border-surface-700 max-h-[92vh] overflow-y-auto">
+
+            <div
+                class="w-10 h-10 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-3 border border-emerald-500/30">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+
+            <h3 class="text-base sm:text-lg font-bold font-display text-white mb-1">Book Reserved!</h3>
+            <p id="receiptFulfillmentText" class="text-xs text-gray-400 mb-4 px-2">We will notify you when your book is
+                ready for hub pickup or delivery.</p>
+
+            <div class="bg-white p-3 rounded-xl mb-4 shadow-sm">
+                <div class="grid grid-cols-6 gap-1 w-32 h-32" id="mockQrCode"></div>
+            </div>
+
+            <div class="w-full bg-surface-850 rounded-xl p-2.5 mb-4 border border-surface-700">
+                <p class="text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Order Reference</p>
+                <p class="text-sm font-mono font-bold text-white tracking-wider">#BL-<span id="orderIdSpan"></span></p>
+            </div>
+
+            <button onclick="closeModals(true)"
+                class="w-full py-2.5 rounded-xl bg-surface-800 hover:bg-surface-750 text-white text-xs font-semibold border border-surface-700 transition-colors">
+                Return to Book Catalog
+            </button>
+        </div>
+
+        <!-- MODAL 4: CREATE A BOOK LISTING -->
+        <div id="consignModal"
+            class="glass-modal mobile-bottom-sheet w-full max-w-xl rounded-2xl sm:rounded-3xl p-5 sm:p-7 hidden flex-col shadow-2xl border border-surface-700 max-h-[92vh] overflow-y-auto no-scrollbar">
+
+            <div class="w-10 h-1 rounded-full bg-surface-700 mx-auto mb-3 sm:hidden"></div>
+
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-surface-750">
+                <div>
+                    <h3 class="text-base sm:text-lg font-bold font-display text-white">Share a book</h3>
+                    <p class="text-xs text-gray-400 mt-0.5">Add the details students need to make a decision.</p>
+                </div>
+                <button onclick="closeModals()"
+                    class="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-surface-800">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="consignForm" onsubmit="handleConsign(event)" class="space-y-4 text-sm">
+                <div>
+                    <label for="cTitle" class="block text-gray-200 font-semibold mb-1.5">Book title</label>
+                    <input type="text" id="cTitle" required maxlength="120"
+                        class="w-full bg-surface-850 border border-surface-700 rounded-xl px-3.5 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-brand-purple transition-colors text-sm"
+                        placeholder="e.g. The Midnight Library">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label for="cAuthor" class="block text-gray-300 font-medium mb-1">Author</label>
+                        <input type="text" id="cAuthor" required maxlength="80"
+                            class="w-full bg-surface-850 border border-surface-700 rounded-xl px-3.5 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-brand-purple text-sm"
+                            placeholder="Author name">
+                    </div>
+                    <div>
+                        <label for="cIsbn" class="block text-gray-300 font-medium mb-1">ISBN <span
+                                class="text-gray-500">(optional)</span></label>
+                        <input type="text" id="cIsbn" maxlength="24"
+                            class="w-full bg-surface-850 border border-surface-700 rounded-xl px-3.5 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-brand-purple text-sm"
+                            placeholder="978-...">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="cDescription" class="block text-gray-300 font-medium mb-1">Description and condition
+                        notes</label>
+                    <textarea id="cDescription" required maxlength="600" rows="3"
+                        class="w-full bg-surface-850 border border-surface-700 rounded-xl px-3.5 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-brand-purple text-sm resize-none"
+                        placeholder="Describe the book, edition, highlights, writing, missing pages, or other details."></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label for="cCourse" class="block text-gray-300 font-medium mb-1">Subject / Genre</label>
+                        <input type="text" id="cCourse" required
+                            class="w-full bg-surface-850 border border-surface-700 rounded-xl px-3.5 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-brand-purple transition-colors uppercase text-sm"
+                            placeholder="MATH 101">
+                    </div>
+                    <div>
+                        <label for="cPrice" class="block text-gray-300 font-medium mb-1">Price / Rate (₱)</label>
+                        <input type="number" id="cPrice" required min="0" step="1" max="1500"
+                            class="w-full bg-surface-850 border border-surface-700 rounded-xl px-3.5 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-brand-purple transition-colors font-mono text-sm"
+                            placeholder="250">
+                        <p id="cPriceHelper" class="hidden text-[10px] text-blue-300 mt-1 leading-tight">Donated
+                            resources are provided <strong>FREE (₱0)</strong> to students. A standard ₱35 handling fee
+                            is collected from the recipient to fund hub logistics.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="cCategory" class="block text-gray-300 font-medium mb-1">Category</label>
+                    <div class="relative">
+                        <select id="cCategory"
+                            class="w-full bg-surface-850 border border-surface-700 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-brand-purple transition-colors appearance-none text-sm">
+                            <option value="Fiction">Fiction & Literature</option>
+                            <option value="Non-Fiction">Non-Fiction</option>
+                            <option value="Manga">Manga</option>
+                            <option value="Textbooks">Textbooks & Academic</option>
+                            <option value="Reviewers">Reviewers & Professional Guides</option>
+                            <option value="BLIS">BLIS & Library Science</option>
+                        </select>
+                        <div
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label for="cCondition" class="block text-gray-300 font-medium mb-1">Condition</label>
+                        <select id="cCondition"
+                            class="w-full bg-surface-850 border border-surface-700 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-brand-purple text-sm">
+                            <option>Like New</option>
+                            <option selected>Good</option>
+                            <option>Fair</option>
+                            <option>Well Used</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="cLocation" class="block text-gray-300 font-medium mb-1">City / Area</label>
+                        <select id="cLocation"
+                            class="w-full bg-surface-850 border border-surface-700 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-brand-purple text-sm">
+                            <option>Davao City</option>
+                            <option>Quezon City</option>
+                            <option>Manila</option>
+                            <option>Makati</option>
+                            <option>Cebu City</option>
+                            <option>Baguio City</option>
+                        </select>
+                    </div>
+                </div>
+
+                <fieldset>
+                    <legend class="block text-gray-200 font-semibold mb-1.5">How will you hand the book to BiblioLoop?</legend>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <label id="cMeetupLabel"
+                            class="flex items-center gap-3 p-3 rounded-xl bg-surface-850 border border-surface-700 cursor-pointer hover:border-brand-teal/50 transition-colors">
+                            <input type="checkbox" id="cMeetup" checked class="accent-[#45b5a2]">
+                            <span><strong class="block text-white text-[11px]">Drop off at the hub</strong><small
+                                    class="text-gray-500">Bring it after an order is confirmed</small></span>
+                        </label>
+                        <label id="cDeliveryLabel"
+                            class="flex items-center gap-3 p-3 rounded-xl bg-surface-850 border border-surface-700 cursor-pointer hover:border-brand-teal/50 transition-colors">
+                            <input type="checkbox" id="cDelivery" checked class="accent-[#45b5a2]">
+                            <span><strong class="block text-white text-[11px]">Send by courier</strong><small
+                                    class="text-gray-500">Ship it to the hub</small></span>
+                        </label>
+                    </div>
+                    <p id="cHandoffHelper" class="hidden text-[10px] text-blue-300 mt-1.5 leading-tight">Donated
+                        books must first be handed to BiblioLoop. After intake, students can collect them with a QR pass or request delivery.</p>
+                </fieldset>
+
+                <!-- Exchange Type Selection -->
+                <fieldset>
+                    <legend class="block text-gray-200 font-semibold mb-1.5">How do you want to share it?</legend>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="lisTag" value="red" class="peer sr-only" required>
+                            <div
+                                class="p-3 rounded-xl border border-surface-700 bg-surface-850 peer-checked:border-red-500 peer-checked:bg-red-500/10 peer-focus-visible:ring-2 peer-focus-visible:ring-brand-teal flex items-center gap-3 transition-all hover:border-red-500/50">
+                                <span class="w-2.5 h-2.5 rounded-full bg-red-500 flex-shrink-0"></span>
+                                <div>
+                                    <p class="font-bold text-white text-xs">For Rent</p>
+                                    <p class="text-[10px] text-gray-400 mt-0.5">Lend it for a set period</p>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="cursor-pointer">
+                            <input type="radio" name="lisTag" value="green" class="peer sr-only" required>
+                            <div
+                                class="p-3 rounded-xl border border-surface-700 bg-surface-850 peer-checked:border-emerald-500 peer-checked:bg-emerald-500/10 peer-focus-visible:ring-2 peer-focus-visible:ring-brand-teal flex items-center gap-3 transition-all hover:border-emerald-500/50">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 flex-shrink-0"></span>
+                                <div>
+                                    <p class="font-bold text-white text-xs">For Sale</p>
+                                    <p class="text-[10px] text-gray-400 mt-0.5">Sell directly to a student</p>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="cursor-pointer">
+                            <input type="radio" name="lisTag" value="blue" class="peer sr-only" required>
+                            <div
+                                class="p-3 rounded-xl border border-surface-700 bg-surface-850 peer-checked:border-blue-500 peer-checked:bg-blue-500/10 peer-focus-visible:ring-2 peer-focus-visible:ring-brand-teal flex items-center gap-3 transition-all hover:border-blue-500/50">
+                                <span class="w-2.5 h-2.5 rounded-full bg-blue-500 flex-shrink-0"></span>
+                                <div>
+                                    <p class="font-bold text-white text-xs">Donate</p>
+                                    <p class="text-[10px] text-blue-300 mt-0.5">Free book · ₱35 handling fee</p>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="cursor-pointer">
+                            <input type="radio" name="lisTag" value="yellow" class="peer sr-only" required>
+                            <div
+                                class="p-3 rounded-xl border border-surface-700 bg-surface-850 peer-checked:border-amber-400 peer-checked:bg-amber-400/10 peer-focus-visible:ring-2 peer-focus-visible:ring-brand-teal flex items-center gap-3 transition-all hover:border-amber-400/50">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-400 flex-shrink-0"></span>
+                                <div>
+                                    <p class="font-bold text-white text-xs">Book Swap</p>
+                                    <p class="text-[10px] text-gray-400 mt-0.5">Trade it for another book</p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </fieldset>
+
+                <button type="submit"
+                    class="w-full py-3 mt-2 rounded-xl bg-brand-violet hover:bg-purple-600 text-white font-bold text-sm transition-colors">
+                    Publish book
+                </button>
+            </form>
+        </div>
+
+        <!-- MODAL 5: BOOK DETAILS, LOCATION & FULFILLMENT -->
+        <div id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailTitle"
+            class="glass-modal mobile-bottom-sheet w-full max-w-3xl rounded-2xl sm:rounded-3xl hidden flex-col shadow-2xl border border-surface-700 max-h-[92vh] overflow-hidden">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-surface-750">
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest text-brand-teal font-bold">Book listing</p>
+                    <h3 class="text-base font-bold text-white">Book details</h3>
+                </div>
+                <button type="button" onclick="closeModals()" aria-label="Close book details"
+                    class="text-gray-400 hover:text-white p-2 rounded-lg hover:bg-surface-800">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="overflow-y-auto p-5 sm:p-6 no-scrollbar">
+                <div class="grid md:grid-cols-[220px_1fr] gap-5 sm:gap-6">
+                    <div>
+                        <img id="detailImage" src="" alt=""
+                            onerror="this.onerror=null; this.src='./Logo/BiblioLoop.png';"
+                            class="w-full max-w-[220px] mx-auto aspect-[2/3] object-cover rounded-2xl bg-surface-900 border border-surface-700">
+                        <div class="mt-3 flex flex-wrap gap-2 justify-center md:justify-start">
+                            <span id="detailTag" class="text-[10px] font-bold px-2 py-1 rounded-full border"></span>
+                            <span id="detailCondition"
+                                class="text-[10px] font-semibold px-2 py-1 rounded-full bg-brand-teal/10 text-brand-teal border border-brand-teal/30"></span>
+                        </div>
+                    </div>
+
+                    <div class="min-w-0">
+                        <p id="detailCategory"
+                            class="text-[10px] font-bold uppercase tracking-wider text-brand-fuchsia"></p>
+                        <h2 id="detailTitle" class="text-xl sm:text-2xl font-display font-extrabold text-white mt-1">
+                        </h2>
+                        <p id="detailAuthor" class="text-xs sm:text-sm text-gray-400 mt-1"></p>
+                        <div class="flex items-end gap-2 mt-4">
+                            <span id="detailPrice" class="text-2xl font-bold font-mono text-white"></span>
+                            <span id="detailPriceLabel" class="text-xs text-gray-500 mb-1"></span>
+                        </div>
+
+                        <div class="mt-5">
+                            <h4 class="text-xs font-bold text-white mb-1.5">Seller's description</h4>
+                            <p id="detailDescription"
+                                class="text-xs sm:text-sm leading-relaxed text-gray-300 whitespace-pre-line"></p>
+                        </div>
+
+                        <div class="mt-5 grid sm:grid-cols-2 gap-3">
+                            <div class="bg-surface-850 rounded-xl p-3 border border-surface-700">
+                                <p class="text-[10px] uppercase tracking-wider text-gray-500">Seller</p>
+                                <p id="detailSeller" class="text-xs font-bold text-white mt-1"></p>
+                                <p class="text-[10px] text-brand-teal mt-1">✓ Community verified</p>
+                            </div>
+                            <div class="bg-surface-850 rounded-xl p-3 border border-surface-700">
+                                <p class="text-[10px] uppercase tracking-wider text-gray-500">Approximate location</p>
+                                <p id="detailLocation" class="text-xs font-bold text-white mt-1"></p>
+                                <p id="detailFulfillment" class="text-[10px] text-gray-400 mt-1"></p>
+                            </div>
+                        </div>
+
+                        <!-- Donated Resource Hub Notice -->
+                        <div id="detailDonatedNotice"
+                            class="hidden mt-5 bg-blue-950/40 rounded-xl p-3.5 border border-blue-500/40">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-base flex-shrink-0">📦</span>
+                                <h4 class="text-xs font-bold text-white">Central Hub Collection · Free
+                                    Educational Resource</h4>
+                            </div>
+                            <p class="text-[11px] text-blue-200 leading-relaxed">
+                                This educational book was donated to the community and is kept in the central BiblioLoop
+                                Hub. The book is <strong>100% FREE (₱0.00)</strong> for students; a standard <strong>₱35
+                                    handling fee</strong> funds hub operations and packaging. Reserve online, then collect it at the hub with your QR pass or request delivery.
+                            </p>
+                        </div>
+
+                        <div id="meetupPlanner" class="mt-4 bg-brand-teal/5 rounded-lg p-3 border border-brand-teal/20">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-lg bg-brand-teal/10 text-brand-teal flex items-center justify-center flex-shrink-0"
+                                    aria-hidden="true">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                            d="M12 21s6-5.1 6-11a6 6 0 10-12 0c0 5.9 6 11 6 11z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                            d="M12 12.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] text-gray-500 font-semibold">Hub pickup available</p>
+                                    <p id="meetupListingArea" class="text-xs font-semibold text-white mt-0.5"></p>
+                                    <p id="meetupHandoffNote" class="text-[10px] text-gray-400 mt-0.5">Your QR pass is issued after reservation.</p>
+                                </div>
+                            </div>
+                            <div id="meetupSuggestions" aria-live="polite" class="hidden"></div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 mt-5">
+                            <button type="button" onclick="openChatForCurrentItem()"
+                                class="py-3 rounded-xl bg-surface-800 hover:bg-surface-750 border border-surface-700 text-white text-xs font-bold">Chat
+                                with Seller</button>
+                            <button type="button" onclick="addCurrentItemToCart()"
+                                class="py-3 rounded-xl bg-gradient-to-r from-brand-purple to-brand-fuchsia text-white text-xs font-bold">Add
+                                to Book Bag</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL 6: BUYER-SELLER CHAT -->
+        <div id="chatModal" role="dialog" aria-modal="true" aria-labelledby="chatListingTitle"
+            class="glass-modal mobile-bottom-sheet w-full max-w-md rounded-2xl sm:rounded-3xl hidden flex-col shadow-2xl border border-surface-700 h-[78vh] max-h-[680px] overflow-hidden">
+            <div class="flex items-center justify-between px-4 py-3 border-b border-surface-750">
+                <div class="min-w-0">
+                    <p id="chatSellerName" class="text-xs font-bold text-white"></p>
+                    <p id="chatListingTitle" class="text-[10px] text-gray-400 truncate"></p>
+                </div>
+                <button type="button" onclick="closeModals()" aria-label="Close conversation"
+                    class="text-gray-400 hover:text-white p-2 rounded-lg hover:bg-surface-800">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div id="chatContext"
+                class="px-4 py-2.5 bg-surface-850 border-b border-surface-750 text-[10px] text-gray-300"></div>
+            <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar"></div>
+            <div class="px-4 pb-2 flex gap-2 overflow-x-auto no-scrollbar">
+                <button type="button" onclick="sendQuickMessage('Hi! Is this book still available?')"
+                    class="whitespace-nowrap px-2.5 py-1.5 rounded-full border border-surface-700 text-[10px] text-gray-300">Is
+                    it available?</button>
+                <button type="button" onclick="sendQuickMessage('Can you share more photos of the book?')"
+                    class="whitespace-nowrap px-2.5 py-1.5 rounded-full border border-surface-700 text-[10px] text-gray-300">Request
+                    photos</button>
+                <button type="button" onclick="sendQuickMessage('When can this book be ready at the BiblioLoop Hub?')"
+                    class="whitespace-nowrap px-2.5 py-1.5 rounded-full border border-surface-700 text-[10px] text-gray-300">Ask hub
+                    readiness</button>
+            </div>
+            <form onsubmit="sendChatMessage(event)" class="p-3 border-t border-surface-750 flex gap-2">
+                <label for="chatInput" class="sr-only">Message seller</label>
+                <input id="chatInput" maxlength="500" autocomplete="off"
+                    class="flex-1 bg-surface-850 border border-surface-700 rounded-xl px-3 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-brand-teal"
+                    placeholder="Message the seller...">
+                <button type="submit"
+                    class="px-4 rounded-xl bg-brand-teal text-[#071713] text-xs font-bold">Send</button>
+            </form>
+        </div>
+
+        <!-- MODAL 7: BIBLIO CREDITS & ACCOUNT PROFILE (VISIBLE TO USERS WITH ACCOUNTS) -->
+        <div id="accountCreditsModal" role="dialog" aria-modal="true" aria-labelledby="creditsModalTitle"
+            class="glass-modal mobile-bottom-sheet w-full max-w-md rounded-2xl sm:rounded-3xl p-5 sm:p-6 hidden flex-col shadow-2xl border border-brand-purple/30 max-h-[92vh] overflow-y-auto no-scrollbar">
+
+            <div class="w-10 h-1 rounded-full bg-surface-700 mx-auto mb-3 sm:hidden"></div>
+
+            <div class="flex items-center justify-between pb-3 border-b border-surface-750 mb-4">
+                <div class="flex items-center gap-2.5">
+                    <div
+                        class="w-8 h-8 rounded-full bg-brand-violet flex items-center justify-center text-xs font-bold text-white">
+                        C
+                    </div>
+                    <div>
+                        <h3 id="creditsModalTitle" class="text-base sm:text-lg font-bold font-display text-white">Biblio
+                            Credits & Account</h3>
+                        <p class="text-[11px] text-gray-400">Balance and activity</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeModals()" aria-label="Close account modal"
+                    class="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-surface-800 transition-colors">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Account Profile & Membership Switcher -->
+            <div class="bg-surface-850 rounded-2xl p-3.5 border border-surface-700/80 mb-4 shadow-sm">
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <div class="flex items-center gap-2.5">
+                        <div id="modalUserAvatar"
+                            class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-purple to-brand-fuchsia text-xs font-bold text-white flex items-center justify-center shadow-inner">
+                            JN</div>
+                        <div>
+                            <p id="modalUserName" class="text-xs font-bold text-white leading-tight">Jhazmin Nepomuceno
+                            </p>
+                            <p id="modalUserRole" class="text-[10px] text-brand-teal flex items-center gap-1 mt-0.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-brand-teal animate-pulse"></span>
+                                <span>Verified Member Account</span>
+                            </p>
+                        </div>
+                    </div>
+                    <span id="modalAccountIdBadge"
+                        class="text-[9px] font-mono px-2 py-0.5 rounded bg-surface-800 text-gray-400 border border-surface-700">#BL-8819</span>
+                </div>
+
+                <!-- Account State Toggle: Tests "visible to all users with accounts" -->
+                <div class="hidden pt-2 mt-2 border-t border-surface-750 items-center justify-between text-[11px]">
+                    <span class="text-gray-400">Account Session:</span>
+                    <button type="button" onclick="toggleAccountLoginStatus()" id="accountModeToggleBtn"
+                        class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-surface-800 hover:bg-surface-750 text-white border border-surface-700 transition-all flex items-center gap-1.5">
+                        <span id="accountModeIndicatorDot" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                        <span id="accountModeToggleText">Logged In (Member)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Credits Card (When Logged In) -->
+            <div id="activeCreditsSection" class="space-y-4">
+                <div class="rounded-xl p-4 sm:p-5 bg-surface-850 border border-surface-700">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-semibold text-gray-300 uppercase tracking-wider">Available Biblio
+                            Credits</span>
+                        <span
+                            class="text-[10px] text-brand-teal font-mono bg-brand-teal/10 px-2 py-0.5 rounded-full border border-brand-teal/20 font-bold">1
+                            Credit = ₱1.00 PHP</span>
+                    </div>
+                    <div class="flex items-baseline gap-2 mt-1">
+                        <span class="text-2xl sm:text-3xl font-extrabold font-mono text-white tracking-tight"
+                            id="modalCreditsAmount">₱350.00</span>
+                        <span class="text-xs text-brand-fuchsia font-semibold font-mono">(350 Credits)</span>
+                    </div>
+                    <p class="text-[11px] text-gray-400 mt-1.5 leading-relaxed">Store currency for books and rentals, plus hub services such as printing, thesis binding, and book mending.</p>
+
+                    <div class="mt-4 pt-3 border-t border-surface-700/60">
+                        <button type="button" onclick="openDonateFromCreditsModal()"
+                            class="w-full py-2.5 px-3 rounded-lg bg-brand-violet hover:bg-purple-600 text-white text-xs font-semibold transition-colors">
+                            Donate or trade in a book
+                        </button>
+                    </div>
+                </div>
+
+                <!-- How Biblio Credits Work & Donated Resource Connection -->
+                <div class="p-3.5 rounded-2xl bg-surface-850 border border-surface-700/60 text-xs space-y-2">
+                    <h4 class="font-bold text-white text-[11px] uppercase tracking-wide text-gray-400">How Biblio
+                        Credits & Donations Work</h4>
+                    <ul class="space-y-2 text-[11px] text-gray-300">
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-400 mt-0.5">🔵</span>
+                            <span><strong>Donate Resources:</strong> Earn equivalent Biblio-Credits when useful books are accepted into the in-hub inventory.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-amber-400 mt-0.5">🔄</span>
+                            <span><strong>Trade In Books:</strong> Hand over unwanted references or swap pre-loved materials to earn value for your next need.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-400 mt-0.5">🛍️</span>
+                            <span><strong>Spend Anywhere:</strong> Choose Biblio-Credits at checkout for books and rentals, or use them toward printing, binding, and repair services.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Recent Credit Activity -->
+                <div>
+                    <h4 class="font-bold text-white text-xs mb-2 flex items-center justify-between">
+                        <span>Recent Credit Ledger</span>
+                        <span class="text-[10px] text-gray-400 font-normal">Account Activity</span>
+                    </h4>
+                    <div id="creditHistoryList" class="space-y-2 max-h-44 overflow-y-auto pr-1 no-scrollbar">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guest Mode State (If Logged Out) -->
+            <div id="guestCreditsSection"
+                class="hidden text-center py-6 px-3 bg-surface-850 rounded-2xl border border-surface-700/80">
+                <div
+                    class="w-12 h-12 rounded-full bg-brand-purple/20 text-brand-fuchsia flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                </div>
+                <h4 class="text-sm font-bold text-white mb-1">Account Required for Biblio Credits</h4>
+                <p class="text-xs text-gray-400 max-w-xs mx-auto mb-4">
+                    Biblio Credits are exclusive to users with accounts. Sign in to view and spend your credits balance,
+                    receive donation bonuses, and exchange books.
+                </p>
+                <button type="button" onclick="signInStudentAccount()"
+                    class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-purple to-brand-fuchsia text-white text-xs font-bold shadow-lg shadow-purple-900/40">
+                    Sign In to Student Account
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= FLOATING TOAST NOTIFICATION ================= -->
+    <div id="toastNotification"
+        class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 transform -translate-y-6 opacity-0">
+        <div
+            class="px-4 py-2.5 rounded-2xl bg-surface-850/95 backdrop-blur-md border border-brand-purple/40 text-white text-xs shadow-2xl flex items-center gap-2.5">
+            <span id="toastIcon">✨</span>
+            <span id="toastText">Notification message</span>
+        </div>
+    </div>
+
+    <!-- ================= LOGIC & STATE ================= -->
+    <script>
+        // Listing-type tags
+        const lisTags = {
+            'red': {
+                badgeClass: 'bg-red-500/15 text-red-400 border border-red-500/30',
+                dotClass: 'bg-red-500',
+                label: 'For Rent'
+            },
+            'green': {
+                badgeClass: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30',
+                dotClass: 'bg-emerald-500',
+                label: 'For Sale'
+            },
+            'blue': {
+                badgeClass: 'bg-blue-500/15 text-blue-400 border border-blue-500/30',
+                dotClass: 'bg-blue-500',
+                label: 'Free Donation',
+                isDonated: true
+            },
+            'yellow': {
+                badgeClass: 'bg-amber-400/15 text-amber-300 border border-amber-400/30',
+                dotClass: 'bg-amber-400',
+                label: 'Book Swap'
+            }
+        };
+
+        const DEFAULT_BOOK_COVER = './Logo/BiblioLoop.png';
+
+        // Starter catalog: community books, textbooks, reviewers, and BLIS references
+        let resources = [
+            {
+                id: 1,
+                title: 'Calculus: Early Transcendentals',
+                author: 'James Stewart • 8th Edition',
+                course: 'MATH 101',
+                price: 280.00,
+                category: 'STEM',
+                tag: 'green',
+                image: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&q=80',
+                isbn: '978-1285741550'
+            },
+            {
+                id: 2,
+                title: 'Campbell Biology (Global Edition)',
+                author: 'Urry, Cain, Wasserman • 12th Ed.',
+                course: 'BIO 150',
+                price: 260.00,
+                category: 'Health',
+                tag: 'red',
+                image: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=500&q=80',
+                isbn: '978-0135188743'
+            },
+            {
+                id: 3,
+                title: 'PRC Board Licensure Exam Reviewer for Teachers (LET)',
+                author: 'Academic Board Panel • 2026 Edition',
+                course: 'EDUC 400',
+                price: 0.00,
+                handlingFee: 35.00,
+                category: 'Reviewers',
+                tag: 'blue',
+                image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=500&q=80',
+                isbn: 'PRC-LET-2026'
+            },
+            {
+                id: 4,
+                title: 'Organic Chemistry & Solution Manual',
+                author: 'David Klein • 3rd Edition',
+                course: 'CHEM 201',
+                price: 240.00,
+                category: 'STEM',
+                tag: 'red',
+                image: 'https://images.unsplash.com/photo-1603126857599-f6e15782fa15?w=500&q=80',
+                isbn: '978-1119659082'
+            },
+            {
+                id: 5,
+                title: 'Intermediate Accounting Vol. 1',
+                author: 'Zeus Vernon Millan • Standard Syllabus',
+                course: 'BSA 201',
+                price: 210.00,
+                category: 'Business',
+                tag: 'green',
+                image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=500&q=80',
+                isbn: '978-6214160451'
+            },
+            {
+                id: 6,
+                title: 'Civil Engineering Reference Manual (CERM)',
+                author: 'Michael R. Lindeburg, PE',
+                course: 'CE 501',
+                price: 290.00,
+                category: 'STEM',
+                tag: 'yellow',
+                image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=500&q=80',
+                isbn: '978-1591265702'
+            },
+            {
+                id: 7,
+                title: 'Philippine Constitutional Law & Case Digest',
+                author: 'Justice Isagani Cruz',
+                course: 'LAW 101',
+                price: 230.00,
+                category: 'Business',
+                tag: 'yellow',
+                image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=500&q=80',
+                isbn: '978-9710115563'
+            },
+            {
+                id: 8,
+                title: 'University Physics with Modern Physics',
+                author: 'Young and Freedman • 14th Edition',
+                course: 'PHYS 102',
+                price: 0.00,
+                handlingFee: 35.00,
+                category: 'STEM',
+                tag: 'blue',
+                image: 'https://images.unsplash.com/photo-1576495199011-eb94736d05d6?w=500&q=80',
+                isbn: '978-0133969290'
+            }
+        ];
+
+        const resourceDetails = {
+            1: { description: 'A clean and complete calculus reference with intact binding. A few light pencil notes appear in the first three chapters and can be erased.', condition: 'Good', location: 'Quezon City', seller: 'Mika R.', priceLabel: 'sale price' },
+            2: { description: 'Complete global edition suitable for biology and health-science courses. Pages are clean; the cover has light shelf wear.', condition: 'Good', location: 'Manila', seller: 'Carlos D.', priceLabel: 'monthly rental' },
+            3: { description: 'Updated LET reviewer covering professional education, general education, and practice tests. Donated to the community for student licensure prep. 100% free of book charge; standard ₱35 handling fee applies.', condition: 'Like New', location: 'Baguio City', seller: 'BiblioLoop Central Hub (Donated)', priceLabel: 'FREE (+₱35 Hub Fee)', donor: 'Prof. Ana (College of Education)' },
+            4: { description: 'Organic chemistry text with solution manual. Contains helpful highlighting but no torn or missing pages.', condition: 'Fair', location: 'Cebu City', seller: 'Jules P.', priceLabel: 'monthly rental' },
+            5: { description: 'Intermediate accounting reference aligned with the standard syllabus. Clean pages and firm binding.', condition: 'Like New', location: 'Makati', seller: 'Bea S.', priceLabel: 'sale price' },
+            6: { description: 'Comprehensive civil engineering reference. Older copy with normal wear, ideal for review and reference swapping.', condition: 'Good', location: 'Davao City', seller: 'Engr. Paolo', priceLabel: 'swap value' },
+            7: { description: 'Philippine constitutional-law reference with selected case notes in the margins. Complete and readable.', condition: 'Good', location: 'Manila', seller: 'Lex Community', priceLabel: 'swap value' },
+            8: { description: 'Donated physics reference with complete chapters and exercises. Free community book for STEM students; ₱35 platform handling fee applies. Delivered from hub.', condition: 'Good', location: 'Quezon City', seller: 'BiblioLoop Central Hub (Donated)', priceLabel: 'FREE (+₱35 Hub Fee)', donor: 'BiblioLoop Community Hub Manila' }
+        };
+
+        resources = resources.map(resource => ({
+            ...resource,
+            category: ['STEM', 'Health', 'Business'].includes(resource.category) ? 'Textbooks' : resource.category,
+            ...resourceDetails[resource.id],
+            meetup: true,
+            delivery: true,
+            inventory: [2, 3, 8].includes(resource.id) ? 'hub' : 'peer'
+        }));
+
+        resources.push(
+            {
+                id: 9,
+                title: 'Introduction to Cataloging and Classification',
+                author: 'Arlene G. Taylor • 11th Edition',
+                course: 'BLIS 203',
+                price: 245,
+                category: 'BLIS',
+                tag: 'green',
+                image: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=500&q=80',
+                isbn: '978-1591582359',
+                description: 'A core BLIS reference on descriptive cataloging, subject analysis, classification, and metadata. Pages are complete with a few useful study tabs.',
+                condition: 'Good',
+                location: 'Quezon City',
+                seller: 'Librarian Mae',
+                priceLabel: 'sale price',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 10,
+                title: 'Foundations of Library and Information Science',
+                author: 'Richard E. Rubin',
+                course: 'BLIS 101',
+                price: 180,
+                category: 'BLIS',
+                tag: 'red',
+                image: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=500&q=80',
+                isbn: '978-0838913703',
+                description: 'Useful introductory material for BLIS students covering libraries, information organizations, ethics, and the information profession.',
+                condition: 'Like New',
+                location: 'Manila',
+                seller: 'Nico L.',
+                priceLabel: 'monthly rental',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 11,
+                title: 'The Midnight Library',
+                author: 'Matt Haig',
+                course: 'FICTION',
+                price: 170,
+                category: 'Fiction',
+                tag: 'yellow',
+                image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=500&q=80',
+                isbn: '978-0525559474',
+                description: 'Pre-loved paperback in good condition. No missing pages, with a small crease on the back cover. Available for another fiction title or its listed value.',
+                condition: 'Good',
+                location: 'Cebu City',
+                seller: 'Alyssa Reads',
+                priceLabel: 'swap value',
+                meetup: true,
+                delivery: false
+            },
+            {
+                id: 12,
+                title: 'The Psychology of Money',
+                author: 'Morgan Housel',
+                course: 'PERSONAL FINANCE',
+                price: 190,
+                category: 'Non-Fiction',
+                tag: 'green',
+                image: 'https://images.unsplash.com/photo-1592496431122-2349e0fbc666?w=500&q=80',
+                isbn: '978-0857197689',
+                description: 'Gently used personal-finance book with clean pages and no highlighting. The book can be transferred through the BiblioLoop Hub for pickup or delivery.',
+                condition: 'Like New',
+                location: 'Davao City',
+                seller: 'Ken M.',
+                priceLabel: 'sale price',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 13,
+                title: 'Civil Service Examination Comprehensive Reviewer (Prof & Sub-Prof)',
+                author: 'Dr. Evelyn Santos • 2026 Updated Edition',
+                course: 'CSC 101',
+                price: 235.00,
+                category: 'Reviewers',
+                tag: 'green',
+                image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=500&q=80',
+                isbn: '978-9710321456',
+                description: 'Complete CSC reviewer covering verbal ability, numerical reasoning, analytical tests, and general Philippine constitution questions with answer explanations.',
+                condition: 'Like New',
+                location: 'Quezon City',
+                seller: 'Reviewer Hub QC',
+                priceLabel: 'sale price',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 14,
+                title: 'NLE Nursing Licensure Examination Core Companion & Practice Drills',
+                author: 'Maria Elena Ramos, RN, MAN',
+                course: 'NURS 400',
+                price: 250.00,
+                category: 'Reviewers',
+                tag: 'red',
+                image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=500&q=80',
+                isbn: '978-9710899234',
+                description: 'High-yield nursing board exam reviewer with practice drills in medical-surgical, maternal & child, and community health nursing.',
+                condition: 'Good',
+                location: 'Manila',
+                seller: 'Nurse Carlo',
+                priceLabel: 'monthly rental',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 15,
+                title: 'Licensure Examination for Teachers (LET) Complete Reviewer',
+                author: 'Professional and General Education Review Team · 2026 Edition',
+                course: 'LET REVIEW',
+                price: 220.00,
+                category: 'Reviewers',
+                tag: 'green',
+                image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500&q=80',
+                isbn: 'LET-DVO-2026-01',
+                description: 'Davao-based LET reviewer covering professional education, general education, specialization drills, and timed practice tests with answer keys.',
+                condition: 'Like New',
+                location: 'Davao City',
+                seller: 'Teacher Mia · Davao',
+                priceLabel: 'sale price',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 16,
+                title: 'Philippine Nurse Licensure Exam Reviewer and Mock Boards',
+                author: 'Mindanao Nursing Review Circle · 2026 Edition',
+                course: 'NLE REVIEW',
+                price: 150.00,
+                category: 'Reviewers',
+                tag: 'red',
+                image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=500&q=80',
+                isbn: 'NLE-DVO-2026-02',
+                description: 'Complete nursing board review notes with medical-surgical, maternal and child, psychiatric, and community-health mock examinations.',
+                condition: 'Good',
+                location: 'Davao City',
+                seller: 'Nurse Bea · Bajada',
+                priceLabel: 'monthly rental',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 17,
+                title: 'Criminologist Licensure Examination Reviewer',
+                author: 'Criminology Review Faculty · Updated Syllabus',
+                course: 'CLE REVIEW',
+                price: 195.00,
+                category: 'Reviewers',
+                tag: 'green',
+                image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=500&q=80',
+                isbn: 'CLE-DVO-2026-03',
+                description: 'Focused reviewer for criminal law, law enforcement administration, crime detection, criminalistics, corrections, and sociology of crimes.',
+                condition: 'Good',
+                location: 'Davao City',
+                seller: 'JC Review Notes · Matina',
+                priceLabel: 'sale price',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 18,
+                title: 'Civil Engineering Licensure Exam Formula and Problem Guide',
+                author: 'Mindanao CE Review Group',
+                course: 'CELE REVIEW',
+                price: 250.00,
+                category: 'Reviewers',
+                tag: 'yellow',
+                image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=500&q=80',
+                isbn: 'CELE-DVO-2026-04',
+                description: 'Board-exam problem sets and concise formula notes for mathematics, surveying, transportation, hydraulics, geotechnical, and structural engineering.',
+                condition: 'Good',
+                location: 'Davao City',
+                seller: 'Engr. Luis · Obrero',
+                priceLabel: 'swap value',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 19,
+                title: 'CPA Licensure Examination Review Notes and Practice Sets',
+                author: 'Davao Accountancy Review Circle · 2026',
+                course: 'CPALE REVIEW',
+                price: 165.00,
+                category: 'Reviewers',
+                tag: 'red',
+                image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=500&q=80',
+                isbn: 'CPALE-DVO-2026-05',
+                description: 'Organized CPALE notes and exercises for financial accounting, advanced accounting, auditing, taxation, regulatory framework, and management advisory services.',
+                condition: 'Like New',
+                location: 'Davao City',
+                seller: 'Alyssa C. · Ecoland',
+                priceLabel: 'monthly rental',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 20,
+                title: 'Pharmacist Licensure Examination Comprehensive Reviewer',
+                author: 'Pharmacy Board Review Collective · 2026 Edition',
+                course: 'PHLE REVIEW',
+                price: 210.00,
+                category: 'Reviewers',
+                tag: 'green',
+                image: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=500&q=80',
+                isbn: 'PHLE-DVO-2026-06',
+                description: 'Davao board-exam reviewer with pharmaceutical chemistry, pharmacology, pharmaceutics, quality assurance, and pharmacy-practice drills.',
+                condition: 'Like New',
+                location: 'Davao City',
+                seller: 'Pharm. Lea · Lanang',
+                priceLabel: 'sale price',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 21,
+                title: 'Registered Electrical Engineer Board Exam Reviewer',
+                author: 'REE Review Faculty · Formula and Problem Sets',
+                course: 'REE REVIEW',
+                price: 230.00,
+                category: 'Reviewers',
+                tag: 'green',
+                image: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=500&q=80',
+                isbn: 'REE-DVO-2026-07',
+                description: 'Davao-based electrical engineering board reviewer covering mathematics, engineering sciences, and electrical engineering problem sets with solutions.',
+                condition: 'Like New',
+                location: 'Davao City',
+                seller: 'Engr. Sam · Toril',
+                priceLabel: 'sale price',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 22,
+                title: 'Mechanical Engineering Licensure Exam Practice Manual',
+                author: 'Mindanao ME Review Group · 2026',
+                course: 'MELE REVIEW',
+                price: 145.00,
+                category: 'Reviewers',
+                tag: 'red',
+                image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=500&q=80',
+                isbn: 'MELE-DVO-2026-08',
+                description: 'Practice manual for power and industrial plant engineering, mathematics, engineering economics, and machine design board-exam subjects.',
+                condition: 'Good',
+                location: 'Davao City',
+                seller: 'Marco R. · Buhangin',
+                priceLabel: 'monthly rental',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 23,
+                title: 'Social Workers Licensure Examination Review Guide',
+                author: 'Social Work Review Circle · Updated Edition',
+                course: 'SWLE REVIEW',
+                price: 180.00,
+                category: 'Reviewers',
+                tag: 'yellow',
+                image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&q=80',
+                isbn: 'SWLE-DVO-2026-09',
+                description: 'Review notes and practice questions covering human behavior, social welfare policies, social work practice, and field instruction.',
+                condition: 'Good',
+                location: 'Davao City',
+                seller: 'Ana P. · Agdao',
+                priceLabel: 'swap value',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 24,
+                title: 'Psychometrician Licensure Exam Reviewer',
+                author: 'Behavioral Science Review Team · 2026',
+                course: 'BLEPP REVIEW',
+                price: 205.00,
+                category: 'Reviewers',
+                tag: 'green',
+                image: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=500&q=80',
+                isbn: 'BLEPP-DVO-2026-10',
+                description: 'Comprehensive psychometrician reviewer for psychological assessment, abnormal psychology, industrial psychology, and theories of personality.',
+                condition: 'Like New',
+                location: 'Davao City',
+                seller: 'Kai M. · Downtown Davao',
+                priceLabel: 'sale price',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 25,
+                title: 'Spy × Family, Vol. 1',
+                author: 'Tatsuya Endo',
+                course: 'MANGA',
+                price: 120.00,
+                category: 'Manga',
+                tag: 'green',
+                image: 'https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?w=500&q=80',
+                isbn: '978-1974715466',
+                description: 'A clean leisure-reading copy from the in-hub display collection. Complete pages with light shelf wear.',
+                condition: 'Good',
+                location: 'Davao City',
+                seller: 'BiblioLoop Physical Hub',
+                priceLabel: 'sale price',
+                inventory: 'hub',
+                meetup: true,
+                delivery: true
+            }
+        );
+
+        const defaultStarterResources = [...resources];
+
+        const savedResources = loadJSON('biblioloop_resources', null);
+        if (Array.isArray(savedResources) && savedResources.length) {
+            resources = savedResources;
+            // Keep starter reviewer listings available when older saved catalogs are loaded
+            [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25].forEach(newId => {
+                const item = defaultStarterResources.find(r => r.id === newId);
+                if (item && !resources.some(r => r.id === newId)) {
+                    resources.push(item);
+                }
+            });
+        }
+
+        // Keep every catalog card visually complete, including older saved listings.
+        resources.forEach(resource => {
+            if (typeof resource.image !== 'string' || !resource.image.trim()) {
+                resource.image = DEFAULT_BOOK_COVER;
+            }
+            if (!resource.inventory) {
+                resource.inventory = resource.tag === 'blue' ? 'hub' : 'peer';
+            }
+        });
+
+        // Donated items are fee-only and become ready-to-collect in-hub inventory.
+        resources.forEach(r => {
+            if (r.tag === 'blue') {
+                r.price = 0.00;
+                r.handlingFee = 35.00;
+                r.meetup = true;
+                r.delivery = true;
+                r.inventory = 'hub';
+                r.seller = 'BiblioLoop Central Hub (Donated)';
+                r.priceLabel = 'FREE (+₱35 Hub Fee)';
+            }
+        });
+
+        let userAccount = loadJSON('biblioloop_user_account', {
+            isLoggedIn: true,
+            name: 'Jhazmin Nepomuceno',
+            avatar: 'JN',
+            email: 'jhazmin.nepomuceno@usep.edu.ph',
+            studentId: 'STU-2026-8819',
+            location: 'Davao City',
+            biblioCredits: 350.00,
+            creditHistory: [
+                { id: 1, type: 'earned', desc: 'Resource donation reward (PRC Reviewer)', amount: 150.00, date: '2 days ago' },
+                { id: 2, type: 'earned', desc: 'Welcome community study grant', amount: 200.00, date: '5 days ago' }
+            ]
+        });
+
+        let isOwnerViewingCatalog = false;
+        let selectedPaymentMethod = 'gcash';
+
+        let cart = loadJSON('biblioloop_cart', []);
+        // Sanitize any existing cart items that are donated.
+        cart.forEach(item => {
+            if (item.tag === 'blue') {
+                item.price = 0.00;
+                item.handlingFee = 35.00;
+                item.meetup = true;
+                item.delivery = true;
+                item.inventory = 'hub';
+                item.priceLabel = 'FREE (+₱35 Hub Fee)';
+            }
+        });
+
+        let currentCategory = 'All';
+        let currentLocationFilter = userAccount.location || 'Davao City';
+        let visibleResourceLimit = 9;
+        let currentResourceId = null;
+        let selectedFulfillment = 'meetup';
+        let conversations = loadJSON('biblioloop_conversations', {});
+        let closeModalTimer = null;
+
+        const hubHandoffLocation = 'BiblioLoop Physical Hub · Somewhere St., Davao City';
+
+        const cityCoordinates = {
+            'Quezon City': [14.6760, 121.0437], 'Manila': [14.5995, 120.9842], 'Makati': [14.5547, 121.0244],
+            'Cebu City': [10.3157, 123.8854], 'Davao City': [7.1907, 125.4553], 'Baguio City': [16.4023, 120.5960]
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const catalogLocationSelect = document.getElementById('catalogLocationSelect');
+            if (catalogLocationSelect) catalogLocationSelect.value = currentLocationFilter;
+            initConsignRadioListeners();
+            renderResources();
+            renderDonatedInventory();
+            updateCreditsDisplay();
+            generateMockQR();
+            updateCartBadges();
+        });
+
+        // Render community catalog
+        function renderResources() {
+            const grid = document.getElementById('resourceGrid');
+            const emptyState = document.getElementById('emptyState');
+            const showMoreWrap = document.getElementById('showMoreWrap');
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            const clearBtn = document.getElementById('clearSearchBtn');
+
+            if (searchTerm.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            grid.innerHTML = '';
+
+            const filtered = resources.filter(res => {
+                const matchSearch = res.title.toLowerCase().includes(searchTerm) ||
+                    res.course.toLowerCase().includes(searchTerm) ||
+                    res.author.toLowerCase().includes(searchTerm) ||
+                    res.isbn.toLowerCase().includes(searchTerm) ||
+                    res.location.toLowerCase().includes(searchTerm) ||
+                    res.description.toLowerCase().includes(searchTerm);
+                const matchCat = (currentCategory === 'All') || (res.category === currentCategory);
+                const matchLocation = (currentLocationFilter === 'All') || (res.location === currentLocationFilter);
+                return matchSearch && matchCat && matchLocation;
+            });
+
+            const resultCount = document.getElementById('catalogResultCount');
+            if (resultCount) {
+                const areaLabel = currentLocationFilter === 'All' ? 'all locations' : currentLocationFilter;
+                resultCount.textContent = `${filtered.length} ${filtered.length === 1 ? 'book' : 'books'} in ${areaLabel}`;
+            }
+
+            if (filtered.length === 0) {
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                if (showMoreWrap) showMoreWrap.classList.add('hidden');
+            } else {
+                grid.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+                const visibleResources = filtered.slice(0, visibleResourceLimit);
+                if (showMoreWrap) showMoreWrap.classList.toggle('hidden', filtered.length <= visibleResourceLimit);
+
+                visibleResources.forEach(res => {
+                    const tag = lisTags[res.tag];
+                    const card = document.createElement('div');
+                    card.className = "glass-card group rounded-xl overflow-hidden flex flex-col transition-colors cursor-pointer";
+
+                    const safeTitle = escapeHtml(res.title);
+                    const safeAuthor = escapeHtml(res.author);
+                    const safeCourse = escapeHtml(res.course);
+                    const safeLocation = escapeHtml(res.location);
+                    const safeCondition = escapeHtml(res.condition);
+
+                    card.innerHTML = `
+                        <!-- Cover & Spine Tag -->
+                        <button type="button" onclick="openResourceDetails(${res.id})" class="relative h-48 sm:h-52 w-full overflow-hidden bg-surface-900 text-left" aria-label="View ${safeTitle}">
+                            <img src="${res.image}" alt="${safeTitle}" loading="lazy" onerror="this.onerror=null; this.src='${DEFAULT_BOOK_COVER}';" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity">
+                            <div class="absolute inset-0 bg-gradient-to-t from-surface-900 via-transparent to-transparent"></div>
+                            
+                            <!-- Listing type -->
+                            <div class="absolute top-2.5 right-2.5 ${tag.badgeClass} backdrop-blur-md px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+                                <span class="w-1.5 h-1.5 rounded-full ${tag.dotClass}" aria-hidden="true"></span>
+                                <span class="text-[10px] font-bold tracking-tight">${res.tag === 'blue' && isOwnerViewingCatalog ? 'Donation · Owner preview' : tag.label}</span>
+                            </div>
+                        </button>
+
+                        <!-- Content Details -->
+                        <div class="p-4 flex-1 flex flex-col justify-between">
+                            <div>
+                                <span class="text-[10px] font-mono font-semibold text-violet-300 uppercase">${safeCourse}</span>
+                                <button type="button" onclick="openResourceDetails(${res.id})" class="block text-left w-full">
+                                    <h3 class="text-sm font-semibold text-white line-clamp-2 leading-snug mt-1.5 hover:text-violet-300" title="${safeTitle}">${safeTitle}</h3>
+                                </button>
+                                <p class="text-xs text-gray-400 truncate mt-1">${safeAuthor}</p>
+                                <div class="flex items-center justify-between gap-3 mt-3 text-[11px]">
+                                    <span class="truncate ${res.inventory === 'hub' ? 'text-brand-teal' : 'text-gray-500'}">${res.inventory === 'hub' ? 'Ready at BiblioLoop Hub' : `Seller-held · ${safeLocation}`}</span>
+                                    <span class="text-gray-500 whitespace-nowrap">${safeCondition}</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-3 border-t border-surface-700/60 flex items-end justify-between gap-3">
+                                <div>
+                                    ${res.tag === 'blue' ? `
+                                        <div class="flex items-baseline gap-1">
+                                            <span class="text-sm font-bold font-mono text-emerald-400">FREE</span>
+                                            <span class="text-[11px] font-mono text-gray-400">+₱${(res.handlingFee || 35).toFixed(0)} fee</span>
+                                        </div>
+                                        <span class="text-[10px] text-blue-300 font-medium block mt-0.5">Delivery only</span>
+                                    ` : `
+                                        <span class="text-[11px] text-gray-400 block">${res.priceLabel || 'price'}</span>
+                                        <span class="text-sm font-bold font-mono text-white tracking-tight">₱${res.price.toFixed(2)}</span>
+                                    `}
+                                </div>
+                                <button type="button" onclick="event.stopPropagation(); addToCart(${res.id})" class="px-3 py-2 rounded-lg bg-brand-violet hover:bg-purple-600 text-white text-xs font-semibold transition-colors" aria-label="Add ${safeTitle} to bag">
+                                    Add to bag
+                                </button>
+                            </div>
+                        </div>
+                    `;
+
+                    card.addEventListener('click', (e) => {
+                        if (e.target.closest('button')) return;
+                        openResourceDetails(res.id);
+                    });
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        function loadJSON(key, fallback) {
+            try {
+                const value = localStorage.getItem(key);
+                return value ? JSON.parse(value) : fallback;
+            } catch (error) {
+                return fallback;
+            }
+        }
+
+        function saveMarketplaceState() {
+            try {
+                localStorage.setItem('biblioloop_resources', JSON.stringify(resources));
+                localStorage.setItem('biblioloop_cart', JSON.stringify(cart));
+                localStorage.setItem('biblioloop_conversations', JSON.stringify(conversations));
+                localStorage.setItem('biblioloop_user_account', JSON.stringify(userAccount));
+            } catch (error) {
+                console.warn('BiblioLoop could not save local prototype state.', error);
+            }
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#039;');
+        }
+
+        function showModal(id) {
+            hideAllModals();
+            openOverlay();
+            const modal = document.getElementById(id);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function openResourceDetails(id) {
+            const resource = resources.find(item => item.id === id);
+            if (!resource) return;
+
+            currentResourceId = id;
+            const tag = lisTags[resource.tag];
+            const isDonated = resource.tag === 'blue';
+
+            document.getElementById('detailImage').src = resource.image;
+            document.getElementById('detailImage').alt = resource.title;
+            document.getElementById('detailCategory').textContent = `${resource.category} · ${resource.course}`;
+            document.getElementById('detailTitle').textContent = resource.title;
+            document.getElementById('detailAuthor').textContent = `${resource.author} · ISBN ${resource.isbn || 'not provided'}`;
+            document.getElementById('detailDescription').textContent = resource.description;
+            document.getElementById('detailCondition').textContent = resource.condition;
+            document.getElementById('detailSeller').textContent = resource.seller;
+            document.getElementById('detailLocation').textContent = resource.location;
+            document.getElementById('meetupListingArea').textContent = hubHandoffLocation;
+            document.getElementById('meetupHandoffNote').textContent = resource.inventory === 'hub'
+                ? 'This book is already at the hub and can be collected after confirmation.'
+                : 'The seller transfers this book to the hub after you confirm. We will notify you when it is ready.';
+
+            const donatedNotice = document.getElementById('detailDonatedNotice');
+            if (donatedNotice) donatedNotice.classList.toggle('hidden', !isDonated);
+
+            if (isDonated) {
+                document.getElementById('detailPrice').textContent = '₱0.00 (FREE)';
+                document.getElementById('detailPriceLabel').textContent = '+₱35 Platform Fee (Hub Logistics & Operations)';
+                document.getElementById('detailFulfillment').textContent = 'At Hub · QR pickup or delivery';
+                document.getElementById('meetupPlanner').classList.remove('hidden');
+            } else {
+                document.getElementById('detailPrice').textContent = `₱${resource.price.toFixed(2)}`;
+                document.getElementById('detailPriceLabel').textContent = resource.priceLabel || 'listed price';
+                document.getElementById('detailFulfillment').textContent = [resource.meetup && 'Verified hub pickup', resource.delivery && 'Delivery', resource.inventory === 'hub' && 'Ready at hub'].filter(Boolean).join(' · ');
+                document.getElementById('meetupPlanner').classList.toggle('hidden', !resource.meetup);
+            }
+
+            const detailTag = document.getElementById('detailTag');
+            detailTag.className = `text-[10px] font-bold px-2 py-1 rounded-full border ${tag.badgeClass}`;
+            detailTag.textContent = tag.label;
+            if (resource.meetup) suggestMeetups();
+            showModal('detailModal');
+        }
+
+        function addCurrentItemToCart() {
+            if (currentResourceId !== null) {
+                addToCart(currentResourceId);
+                toggleCartModal(true);
+            }
+        }
+
+        function suggestMeetups() {
+            const resource = resources.find(item => item.id === currentResourceId);
+            if (!resource) return;
+            const container = document.getElementById('meetupSuggestions');
+            if (container) {
+                container.innerHTML = '';
+                container.classList.add('hidden');
+            }
+        }
+
+        function chooseMeetup(place) {
+            const resource = resources.find(item => item.id === currentResourceId);
+            if (!resource) return;
+            const key = String(resource.id);
+            conversations[key] = conversations[key] || [];
+            conversations[key].push({ sender: 'system', text: `Hub handoff selected at ${place}. BiblioLoop will coordinate seller drop-off and notify the buyer when the book is ready.`, time: Date.now() });
+            saveMarketplaceState();
+            openChatForCurrentItem();
+        }
+
+        function openChatForCurrentItem() {
+            const resource = resources.find(item => item.id === currentResourceId);
+            if (!resource) return;
+            const key = String(resource.id);
+            if (!Array.isArray(conversations[key]) || conversations[key].length === 0) {
+                conversations[key] = [{ sender: 'seller', text: `Hi! I'm ${resource.seller}. Feel free to ask about the book's condition or availability. BiblioLoop will manage the hub transfer after an order is confirmed.`, time: Date.now() }];
+                saveMarketplaceState();
+            }
+            document.getElementById('chatSellerName').textContent = resource.seller;
+            document.getElementById('chatListingTitle').textContent = resource.title;
+            document.getElementById('chatContext').textContent = `₱${resource.price.toFixed(2)} · ${resource.location} · ${[resource.meetup && 'Hub pickup', resource.delivery && 'Delivery'].filter(Boolean).join(' / ')} · Handoff managed by BiblioLoop`;
+            renderChatMessages();
+            showModal('chatModal');
+            setTimeout(() => document.getElementById('chatInput').focus(), 50);
+        }
+
+        function renderChatMessages() {
+            const messages = conversations[String(currentResourceId)] || [];
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = '';
+            messages.forEach(message => {
+                const bubble = document.createElement('div');
+                if (message.sender === 'system') {
+                    bubble.className = 'mx-auto max-w-[90%] text-center text-[10px] text-brand-teal bg-brand-teal/10 border border-brand-teal/20 rounded-lg px-3 py-2';
+                } else {
+                    bubble.className = `max-w-[82%] rounded-2xl px-3 py-2 text-xs leading-relaxed ${message.sender === 'buyer' ? 'ml-auto bg-brand-violet text-white rounded-br-sm' : 'mr-auto bg-surface-800 text-gray-200 border border-surface-700 rounded-bl-sm'}`;
+                }
+                bubble.textContent = message.text;
+                container.appendChild(bubble);
+            });
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendChatMessage(event) {
+            event.preventDefault();
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message || currentResourceId === null) return;
+            const key = String(currentResourceId);
+            conversations[key] = conversations[key] || [];
+            conversations[key].push({ sender: 'buyer', text: message, time: Date.now() });
+            input.value = '';
+            saveMarketplaceState();
+            renderChatMessages();
+
+            if (!conversations[key].some(item => item.sender === 'seller' && item.autoReply)) {
+                setTimeout(() => {
+                    conversations[key].push({ sender: 'seller', text: 'Thanks for your message! This prototype saved our conversation. I can confirm the details with you here.', time: Date.now(), autoReply: true });
+                    saveMarketplaceState();
+                    if (!document.getElementById('chatModal').classList.contains('hidden')) renderChatMessages();
+                }, 650);
+            }
+        }
+
+        function sendQuickMessage(message) {
+            document.getElementById('chatInput').value = message;
+            sendChatMessage({ preventDefault() { } });
+        }
+
+        // Filtering Logic
+        function filterResources() {
+            visibleResourceLimit = 9;
+            renderResources();
+        }
+
+        function showMoreResources() {
+            visibleResourceLimit += 9;
+            renderResources();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            visibleResourceLimit = 9;
+            renderResources();
+        }
+
+        function clearSearchAndFilters() {
+            document.getElementById('searchInput').value = '';
+            const allBtn = document.querySelector('.cat-btn:first-child');
+            const allLocationsBtn = document.getElementById('allLocationsBtn');
+            currentLocationFilter = 'All';
+            setLocationFilter('All', allLocationsBtn);
+            setCategory('All', allBtn);
+        }
+
+        function setCategory(cat, btn) {
+            currentCategory = cat;
+            visibleResourceLimit = 9;
+            document.querySelectorAll('.cat-btn').forEach(b => {
+                b.classList.remove('active', 'bg-brand-violet', 'text-white', 'border-brand-purple/40');
+                b.classList.add('bg-surface-850', 'text-gray-400', 'border-surface-700/60');
+            });
+            btn.classList.add('active', 'bg-brand-violet', 'text-white', 'border-brand-purple/40');
+            btn.classList.remove('bg-surface-850', 'text-gray-400', 'border-surface-700/60');
+            renderResources();
+        }
+
+        function setLocationFilter(location, btn) {
+            currentLocationFilter = location;
+            visibleResourceLimit = 9;
+            const catalogLocationSelect = document.getElementById('catalogLocationSelect');
+            if (catalogLocationSelect) {
+                catalogLocationSelect.value = location === 'All' ? '' : location;
+            }
+            document.querySelectorAll('.location-btn').forEach(button => {
+                const isActive = location === 'All';
+                button.classList.toggle('active', isActive);
+                button.classList.toggle('bg-brand-purple/15', isActive);
+                button.classList.toggle('text-violet-300', isActive);
+                button.classList.toggle('bg-transparent', !isActive);
+                button.classList.toggle('text-gray-400', !isActive);
+                button.setAttribute('aria-pressed', String(isActive));
+            });
+            renderResources();
+        }
+
+        function updateUserLocation(location) {
+            if (!cityCoordinates[location]) return;
+            userAccount.location = location;
+            saveMarketplaceState();
+
+            const catalogLocationSelect = document.getElementById('catalogLocationSelect');
+            if (catalogLocationSelect) catalogLocationSelect.value = location;
+            setLocationFilter(location, null);
+        }
+
+        // Cart Management
+        function addToCart(id) {
+            const item = resources.find(r => r.id === id);
+            if (item && !cart.some(c => c.id === id)) {
+                cart.push(item);
+                saveMarketplaceState();
+                updateCartBadges();
+                showToast('Added to your bag. Reserve it when you are ready.', '✓');
+            } else if (item) {
+                showToast('This book is already in your bag.', 'ℹ️');
+            }
+        }
+
+        function updateCartBadges() {
+            const count = cart.length;
+            const desktopBadge = document.getElementById('desktopCartBadge');
+            if (desktopBadge) desktopBadge.innerText = count;
+
+            const mobileDot = document.getElementById('mobileBottomCartDot');
+            if (count > 0) {
+                mobileDot.innerText = count;
+                mobileDot.classList.remove('hidden');
+                mobileDot.classList.add('flex');
+            } else {
+                mobileDot.classList.add('hidden');
+                mobileDot.classList.remove('flex');
+            }
+        }
+
+        function toggleCartModal(forceOpen = false) {
+            const overlay = document.getElementById('modalOverlay');
+            const list = document.getElementById('cartItemsList');
+            const breakdown = document.getElementById('checkoutBreakdown');
+
+            if (overlay.classList.contains('hidden') || forceOpen) {
+                hideAllModals();
+                openOverlay();
+                document.getElementById('cartModal').classList.remove('hidden');
+                document.getElementById('cartModal').classList.add('flex');
+
+                list.innerHTML = '';
+                if (cart.length === 0) {
+                    list.innerHTML = `
+                        <div class="py-8 text-center text-gray-400">
+                            <svg class="w-8 h-8 mx-auto mb-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                            </svg>
+                            <p class="text-xs">No books in your bag yet.</p>
+                        </div>
+                    `;
+                    breakdown.classList.add('hidden');
+                    breakdown.classList.remove('flex');
+                } else {
+                    const hasDonated = cart.some(item => item.tag === 'blue');
+                    const deliveryButton = document.getElementById('deliveryFulfillmentBtn');
+                    const meetupButton = document.querySelector('[data-fulfillment="meetup"]');
+                    const donatedNotice = document.getElementById('cartDonatedNotice');
+
+                    if (meetupButton) {
+                        meetupButton.disabled = false;
+                        meetupButton.classList.remove('opacity-40', 'cursor-not-allowed');
+                        meetupButton.title = '';
+                    }
+                    if (donatedNotice) donatedNotice.classList.toggle('hidden', !hasDonated);
+                    const canDeliver = cart.every(item => item.delivery);
+                    deliveryButton.disabled = !canDeliver;
+                    deliveryButton.title = canDeliver ? '' : 'One or more books are available for hub pickup only';
+                    if (!canDeliver && selectedFulfillment === 'delivery') {
+                        selectFulfillment('meetup', meetupButton);
+                    }
+
+                    cart.forEach((item, index) => {
+                        const tag = lisTags[item.tag];
+                        const isDonated = item.tag === 'blue';
+                        const row = document.createElement('div');
+                        row.className = "flex items-center gap-3 p-2 rounded-xl bg-surface-850 border border-surface-700/60";
+                        row.innerHTML = `
+                            <div class="w-9 h-12 rounded-lg overflow-hidden bg-surface-900 flex-shrink-0">
+                                <img src="${item.image}" alt="${escapeHtml(item.title)}" onerror="this.onerror=null; this.src='${DEFAULT_BOOK_COVER}';" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-semibold text-white truncate">${escapeHtml(item.title)}</p>
+                                <div class="flex items-center gap-1.5 mt-0.5">
+                                    <span class="text-[9px] font-mono text-brand-fuchsia">${escapeHtml(item.course)}</span>
+                                    <span class="text-[9px] ${isDonated ? 'text-blue-300 font-semibold' : 'text-gray-400'}">• ${isDonated ? 'Donated (Free Book · At Hub)' : tag.label}</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-end gap-1">
+                                ${isDonated ? `
+                                    <div class="text-right">
+                                        <span class="text-xs font-bold font-mono text-emerald-400">FREE</span>
+                                        <span class="block text-[9px] font-mono text-blue-300">+₱${(item.handlingFee || 35).toFixed(2)} fee</span>
+                                    </div>
+                                ` : `
+                                    <span class="text-xs font-bold font-mono text-white">₱${item.price.toFixed(2)}</span>
+                                `}
+                                <button onclick="removeFromCart(${index})" class="text-gray-500 hover:text-red-400 p-1" aria-label="Remove ${escapeHtml(item.title)}">
+                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </div>
+                        `;
+                        list.appendChild(row);
+                    });
+                    breakdown.classList.remove('hidden');
+                    breakdown.classList.add('flex');
+                    updateTotal();
+                }
+            } else {
+                closeModals();
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveMarketplaceState();
+            updateCartBadges();
+            toggleCartModal(true);
+        }
+
+        function updateTotal() {
+            if (cart.length === 0) return;
+            const donatedItems = cart.filter(item => item.tag === 'blue');
+            const regularItems = cart.filter(item => item.tag !== 'blue');
+            const subtotal = regularItems.reduce((sum, item) => sum + item.price, 0);
+            const donatedHandlingTotal = donatedItems.reduce((sum, item) => sum + (item.handlingFee || 35.00), 0);
+            const deliveryFee = selectedFulfillment === 'delivery' ? 75.00 : 0.00;
+            const total = subtotal + donatedHandlingTotal + deliveryFee;
+
+            document.getElementById('cartSubtotal').innerText = (subtotal === 0 && donatedItems.length > 0)
+                ? '₱0.00 (Donated Stock)'
+                : `₱${subtotal.toFixed(2)}`;
+
+            const donatedRow = document.getElementById('donatedFeeRow');
+            if (donatedRow) {
+                if (donatedItems.length > 0) {
+                    donatedRow.classList.remove('hidden');
+                    donatedRow.classList.add('flex');
+                    const countLabel = document.getElementById('donatedFeeCountLabel');
+                    if (countLabel) {
+                        countLabel.innerText = `${donatedItems.length} book${donatedItems.length > 1 ? 's' : ''} (100% Platform Income · Hub Warehousing)`;
+                    }
+                    document.getElementById('donatedFeeTotal').innerText = `₱${donatedHandlingTotal.toFixed(2)}`;
+                } else {
+                    donatedRow.classList.add('hidden');
+                    donatedRow.classList.remove('flex');
+                }
+            }
+
+            document.getElementById('cartTotal').innerText = `₱${total.toFixed(2)}`;
+            document.getElementById('deliveryFeeRow').classList.toggle('hidden', deliveryFee === 0);
+            document.getElementById('deliveryFeeRow').classList.toggle('flex', deliveryFee > 0);
+        }
+
+        function selectFulfillment(mode, button) {
+            selectedFulfillment = mode;
+            document.querySelectorAll('.fulfillment-method').forEach(item => {
+                item.classList.remove('border-brand-teal', 'bg-brand-teal/10', 'text-white');
+                item.classList.add('border-surface-700', 'bg-surface-850', 'text-gray-300');
+            });
+            if (button) {
+                button.classList.add('border-brand-teal', 'bg-brand-teal/10', 'text-white');
+                button.classList.remove('border-surface-700', 'bg-surface-850', 'text-gray-300');
+            }
+            document.getElementById('deliveryAddressWrap').classList.toggle('hidden', mode !== 'delivery');
+            updateTotal();
+        }
+
+        function selectPayment(btn, method = 'gcash') {
+            selectedPaymentMethod = method;
+            document.querySelectorAll('.pay-method').forEach(b => {
+                b.classList.remove('active', 'border-brand-purple', 'bg-brand-purple/15', 'text-white');
+                b.classList.add('border-surface-700', 'bg-surface-850', 'text-gray-300');
+            });
+            btn.classList.add('active', 'border-brand-purple', 'bg-brand-purple/15', 'text-white');
+            btn.classList.remove('border-surface-700', 'bg-surface-850', 'text-gray-300');
+
+            const infoBox = document.getElementById('creditsPaymentInfo');
+            if (infoBox) {
+                if (method === 'credits') {
+                    infoBox.classList.remove('hidden');
+                    const statusText = document.getElementById('creditsPaymentStatus');
+                    const donatedItems = cart.filter(item => item.tag === 'blue');
+                    const regularItems = cart.filter(item => item.tag !== 'blue');
+                    const subtotal = regularItems.reduce((sum, item) => sum + item.price, 0);
+                    const donatedHandlingTotal = donatedItems.reduce((sum, item) => sum + (item.handlingFee || 35.00), 0);
+                    const total = subtotal + donatedHandlingTotal + (selectedFulfillment === 'delivery' ? 75.00 : 0.00);
+                    if (userAccount.isLoggedIn && userAccount.biblioCredits >= total) {
+                        statusText.innerHTML = `<span class="text-emerald-400 font-semibold">✓ Sufficient balance!</span> You can pay the entire ₱${total.toFixed(2)} with your Biblio Credits.`;
+                    } else if (userAccount.isLoggedIn) {
+                        statusText.innerHTML = `<span class="text-amber-400 font-semibold">⚠️ Partial balance:</span> You have ₱${userAccount.biblioCredits.toFixed(2)}. Claim a voucher or donate a book for +100 Credits!`;
+                    } else {
+                        statusText.innerHTML = `<span class="text-red-400 font-semibold">⚠️ Account Required:</span> Sign in to your student account to redeem Biblio Credits.`;
+                    }
+                } else {
+                    infoBox.classList.add('hidden');
+                }
+            }
+        }
+
+        function processCheckout() {
+            if (cart.length === 0) return;
+            const hasDonated = cart.some(item => item.tag === 'blue');
+            const hasSellerHeld = cart.some(item => item.inventory !== 'hub');
+            if (selectedPaymentMethod === 'hub' && selectedFulfillment !== 'meetup') {
+                showToast("Pay at Hub is available with Hub Pickup. Choose an online payment method for delivery.", "ℹ️");
+                return;
+            }
+            if (selectedFulfillment === 'delivery' && !document.getElementById('deliveryAddress').value.trim()) {
+                document.getElementById('deliveryAddress').focus();
+                document.getElementById('deliveryAddress').classList.add('border-red-400');
+                return;
+            }
+            document.getElementById('deliveryAddress').classList.remove('border-red-400');
+
+            const donatedItems = cart.filter(item => item.tag === 'blue');
+            const regularItems = cart.filter(item => item.tag !== 'blue');
+            const subtotal = regularItems.reduce((sum, item) => sum + item.price, 0);
+            const donatedHandlingTotal = donatedItems.reduce((sum, item) => sum + (item.handlingFee || 35.00), 0);
+            const orderTotal = subtotal + donatedHandlingTotal + (selectedFulfillment === 'delivery' ? 75.00 : 0.00);
+
+            if (selectedPaymentMethod === 'credits') {
+                if (!userAccount.isLoggedIn) {
+                    showToast("An active student account is required to pay with Biblio Credits.", "⚠️");
+                    return;
+                }
+                if (userAccount.biblioCredits < orderTotal) {
+                    showToast("Insufficient Biblio Credits for this order. Claim a grant or choose GCash/Maya.", "⚠️");
+                    return;
+                }
+                userAccount.biblioCredits -= orderTotal;
+                userAccount.creditHistory.unshift({
+                    id: Date.now(),
+                    type: 'spent',
+                    desc: `Checkout Order (${cart.length} book${cart.length > 1 ? 's' : ''}${hasDonated ? ' incl. Donated Hub Fee' : ''})`,
+                    amount: orderTotal,
+                    date: 'Just now'
+                });
+                updateCreditsDisplay();
+            }
+
+            hideAllModals();
+            document.getElementById('processingModal').classList.remove('hidden');
+            document.getElementById('processingModal').classList.add('flex');
+
+            setTimeout(() => {
+                hideAllModals();
+                document.getElementById('orderIdSpan').innerText = Math.floor(Math.random() * 89999) + 10000;
+                document.getElementById('receiptModal').classList.remove('hidden');
+                document.getElementById('receiptModal').classList.add('flex');
+                document.getElementById('receiptFulfillmentText').textContent = hasSellerHeld
+                    ? (selectedFulfillment === 'delivery'
+                        ? 'Reservation confirmed. The seller will transfer the book to BiblioLoop first. Delivery begins after hub intake and verification.'
+                        : 'Reservation confirmed. The seller will transfer the book to the BiblioLoop Hub. We will activate this QR pass and notify you after intake.')
+                    : (selectedFulfillment === 'delivery'
+                        ? 'Your book is reserved at the BiblioLoop Hub and will be prepared for delivery.'
+                        : `Your book is ready at the BiblioLoop Hub${selectedPaymentMethod === 'hub' ? ', with payment due on collection' : ''}. Present this secure QR pass when you collect it.`);
+
+                cart = [];
+                saveMarketplaceState();
+                updateCartBadges();
+            }, 1600);
+        }
+
+        function generateMockQR() {
+            const qr = document.getElementById('mockQrCode');
+            qr.innerHTML = '';
+            for (let i = 0; i < 36; i++) {
+                const dot = document.createElement('div');
+                const isCorner = (i === 0 || i === 5 || i === 30 || i === 35);
+                const isFilled = isCorner || (Math.random() > 0.45);
+                dot.className = isFilled ? 'bg-void rounded-sm' : 'bg-transparent';
+                qr.appendChild(dot);
+            }
+        }
+
+        // Consign Modal
+        function toggleConsignModal() {
+            hideAllModals();
+            openOverlay();
+            const listingLocation = document.getElementById('cLocation');
+            if (listingLocation && cityCoordinates[userAccount.location]) {
+                listingLocation.value = userAccount.location;
+            }
+            const checkedRadio = document.querySelector('input[name="lisTag"]:checked') || document.querySelector('input[name="lisTag"][value="red"]');
+            if (checkedRadio) {
+                checkedRadio.checked = true;
+                handleListingTypeChange(checkedRadio.value);
+            }
+            document.getElementById('consignModal').classList.remove('hidden');
+            document.getElementById('consignModal').classList.add('flex');
+        }
+
+        function handleListingTypeChange(tag) {
+            const priceInput = document.getElementById('cPrice');
+            const priceHelper = document.getElementById('cPriceHelper');
+            const handoffHelper = document.getElementById('cHandoffHelper');
+            const meetupCheck = document.getElementById('cMeetup');
+            const deliveryCheck = document.getElementById('cDelivery');
+            const meetupLabel = document.getElementById('cMeetupLabel');
+            const deliveryLabel = document.getElementById('cDeliveryLabel');
+
+            if (tag === 'blue') {
+                // Donated: free book for students, checked into in-hub inventory.
+                if (priceInput) {
+                    priceInput.value = 0;
+                    priceInput.readOnly = true;
+                    priceInput.classList.add('opacity-60', 'bg-surface-900', 'cursor-not-allowed');
+                }
+                if (priceHelper) priceHelper.classList.remove('hidden');
+                if (meetupCheck) {
+                    meetupCheck.checked = true;
+                    meetupCheck.disabled = true;
+                }
+                if (meetupLabel) {
+                    meetupLabel.classList.remove('opacity-40', 'cursor-not-allowed');
+                }
+                if (deliveryCheck) {
+                    deliveryCheck.checked = true;
+                    deliveryCheck.disabled = true;
+                }
+                if (deliveryLabel) {
+                    deliveryLabel.classList.add('opacity-90');
+                }
+                if (handoffHelper) handoffHelper.classList.remove('hidden');
+            } else {
+                if (priceInput) {
+                    priceInput.readOnly = false;
+                    priceInput.classList.remove('opacity-60', 'bg-surface-900', 'cursor-not-allowed');
+                    if (parseFloat(priceInput.value) === 0 || !priceInput.value) {
+                        priceInput.value = tag === 'red' ? 150 : (tag === 'green' ? 220 : 180);
+                    }
+                }
+                if (priceHelper) priceHelper.classList.add('hidden');
+                if (meetupCheck) {
+                    meetupCheck.disabled = false;
+                    meetupCheck.checked = true;
+                }
+                if (meetupLabel) {
+                    meetupLabel.classList.remove('opacity-40', 'cursor-not-allowed');
+                }
+                if (deliveryCheck) {
+                    deliveryCheck.disabled = false;
+                    deliveryCheck.checked = true;
+                }
+                if (deliveryLabel) {
+                    deliveryLabel.classList.remove('opacity-90');
+                }
+                if (handoffHelper) handoffHelper.classList.add('hidden');
+            }
+        }
+
+        function handleConsign(e) {
+            e.preventDefault();
+            const tag = document.querySelector('input[name="lisTag"]:checked').value;
+            const title = document.getElementById('cTitle').value.trim();
+            const author = document.getElementById('cAuthor').value.trim();
+            const isbn = document.getElementById('cIsbn').value.trim();
+            const description = document.getElementById('cDescription').value.trim();
+            const course = document.getElementById('cCourse').value.trim().toUpperCase();
+            const price = tag === 'blue' ? 0.00 : parseFloat(document.getElementById('cPrice').value);
+            const category = document.getElementById('cCategory').value;
+            const sellerDropoff = tag === 'blue' ? true : document.getElementById('cMeetup').checked;
+            const sellerCourier = tag === 'blue' ? true : document.getElementById('cDelivery').checked;
+            if (!sellerDropoff && !sellerCourier) {
+                alert('Choose how you will send the book to BiblioLoop: hub drop-off or courier.');
+                return;
+            }
+
+            const priceLabels = { red: 'monthly rental', green: 'sale price', blue: 'FREE (+₱35 Hub Fee)', yellow: 'swap value' };
+
+            const newItem = {
+                id: Math.max(0, ...resources.map(item => item.id)) + 1,
+                title: title,
+                author: author,
+                course: course,
+                price: price,
+                handlingFee: tag === 'blue' ? 35.00 : 0.00,
+                category: category,
+                tag: tag,
+                image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&q=80',
+                isbn: isbn || 'Not provided',
+                description: description,
+                condition: document.getElementById('cCondition').value,
+                location: document.getElementById('cLocation').value,
+                seller: tag === 'blue' ? 'BiblioLoop Central Hub (Donated)' : 'You · Community Seller',
+                donor: tag === 'blue' ? (userAccount.isLoggedIn ? userAccount.name : 'Community Donor') : null,
+                priceLabel: priceLabels[tag],
+                inventory: tag === 'blue' ? 'hub' : 'peer',
+                sellerHandoff: [sellerDropoff && 'hub-dropoff', sellerCourier && 'courier'].filter(Boolean),
+                meetup: true,
+                delivery: true
+            };
+
+            resources.unshift(newItem);
+
+            if (tag === 'blue') {
+                if (userAccount.isLoggedIn) {
+                    userAccount.biblioCredits += 100;
+                    userAccount.creditHistory.unshift({
+                        id: Date.now(),
+                        type: 'earned',
+                        desc: `Book Donation Reward: "${title.slice(0, 22)}..."`,
+                        amount: 100,
+                        date: 'Just now'
+                    });
+                    updateCreditsDisplay();
+                }
+                showToast("Book checked into the Central Hub inventory. +100 Biblio-Credits added!", "🔵");
+            } else {
+                showToast("Book listed. BiblioLoop will request your selected hub transfer after an order is confirmed.", "📚");
+            }
+
+            saveMarketplaceState();
+            renderDonatedInventory();
+            renderResources();
+            e.target.reset();
+            closeModals();
+
+            const allBtn = document.querySelector('.cat-btn:first-child');
+            setCategory('All', allBtn);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+
+        // Overlay & Modal Control
+        function openOverlay() {
+            const overlay = document.getElementById('modalOverlay');
+            if (closeModalTimer) {
+                clearTimeout(closeModalTimer);
+                closeModalTimer = null;
+            }
+            overlay.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+                overlay.classList.add('opacity-100');
+            }, 10);
+        }
+
+        function hideAllModals() {
+            ['cartModal', 'processingModal', 'receiptModal', 'consignModal', 'detailModal', 'chatModal', 'accountCreditsModal'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.classList.add('hidden');
+                    el.classList.remove('flex');
+                }
+            });
+        }
+
+        function closeModals(isReceiptClose = false) {
+            const overlay = document.getElementById('modalOverlay');
+            overlay.classList.remove('opacity-100');
+            overlay.classList.add('opacity-0');
+
+            closeModalTimer = setTimeout(() => {
+                hideAllModals();
+                overlay.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+                closeModalTimer = null;
+                if (isReceiptClose) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }, 200);
+        }
+
+        document.getElementById('modalOverlay').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modalOverlay')) {
+                if (document.getElementById('processingModal').classList.contains('hidden')) {
+                    closeModals();
+                }
+            }
+        });
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && !document.getElementById('modalOverlay').classList.contains('hidden') && document.getElementById('processingModal').classList.contains('hidden')) {
+                closeModals();
+            }
+        });
+
+        // View Switching (Storefront vs Owner Analytics)
+        let isAdminView = false;
+        function toggleAdminMode() {
+            isAdminView = !isAdminView;
+            const store = document.getElementById('storefrontView');
+            const admin = document.getElementById('adminView');
+
+            if (isAdminView) {
+                store.classList.add('hidden');
+                admin.classList.remove('hidden');
+                renderDonatedInventory();
+            } else {
+                admin.classList.add('hidden');
+                store.classList.remove('hidden');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function returnToCatalog() {
+            isAdminView = false;
+            document.getElementById('adminView').classList.add('hidden');
+            document.getElementById('storefrontView').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function scrollToSection(id) {
+            isAdminView = false;
+            document.getElementById('adminView').classList.add('hidden');
+            document.getElementById('storefrontView').classList.remove('hidden');
+            requestAnimationFrame(() => {
+                document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
+
+        // ================= DONATED RESOURCES & IN-HUB INVENTORY =================
+        function renderDonatedInventory() {
+            const donatedGrid = document.getElementById('ownerDonatedGrid');
+            const totalValEl = document.getElementById('ownerDonatedTotalValue');
+            const countEl = document.getElementById('ownerDonatedCount');
+            const statEl = document.getElementById('ownerDonatedRevenueStat');
+            if (!donatedGrid) return;
+
+            const donatedItems = resources.filter(r => r.tag === 'blue');
+            const potentialHandlingRevenue = donatedItems.length * 35.00;
+
+            if (totalValEl) totalValEl.innerText = `₱${potentialHandlingRevenue.toFixed(2)}`;
+            if (countEl) countEl.innerText = `${donatedItems.length} in stock`;
+            if (statEl) statEl.innerText = `₱${(4250.00 + (donatedItems.length * 35)).toFixed(2)}`;
+
+            donatedGrid.innerHTML = '';
+            if (donatedItems.length === 0) {
+                donatedGrid.innerHTML = `
+                    <div class="col-span-full py-8 text-center text-gray-400">
+                        <p class="text-xs">No donated resources in the hub vault yet.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            donatedItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "p-3.5 rounded-xl bg-surface-850 border border-blue-500/25 flex flex-col justify-between hover:border-blue-500/40 transition-colors";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-blue-500/15 text-blue-400 border border-blue-500/30">Hub Stock · Free Book</span>
+                            <span class="text-[10px] font-mono font-bold text-emerald-400">₱0 Book Price</span>
+                        </div>
+                        <div class="flex gap-2.5">
+                            <div class="w-12 h-16 rounded-lg overflow-hidden bg-surface-900 flex-shrink-0">
+                                <img src="${item.image}" alt="${escapeHtml(item.title)}" onerror="this.onerror=null; this.src='${DEFAULT_BOOK_COVER}';" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-xs font-semibold text-white truncate" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</h4>
+                                <p class="text-[10px] text-gray-400 truncate">${escapeHtml(item.author)}</p>
+                                <p class="text-[9px] font-mono text-brand-teal mt-0.5">${escapeHtml(item.course)} • ${escapeHtml(item.category)}</p>
+                                <p class="text-[9px] text-blue-300/90 mt-1 truncate font-medium">Donor: ${escapeHtml(item.donor || 'Community Member')}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 pt-2.5 border-t border-surface-750 flex items-center justify-between text-xs">
+                        <div>
+                            <span class="text-[9px] text-blue-300 font-semibold block uppercase">Owner Income</span>
+                            <span class="font-mono font-bold text-white text-xs">₱${(item.handlingFee || 35).toFixed(2)} Fee</span>
+                            <span class="text-[9px] text-gray-400 block">QR Hub Pickup or Delivery</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button type="button" onclick="grantScholarLoan(${item.id})"
+                                class="px-2.5 py-1 rounded-lg text-[10px] font-semibold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 transition-all">
+                                Grant to Scholar
+                            </button>
+                            <button type="button" onclick="openResourceDetails(${item.id})"
+                                class="px-2 py-1 rounded-lg text-[10px] bg-surface-800 hover:bg-surface-750 text-gray-300 transition-all">
+                                View
+                            </button>
+                        </div>
+                    </div>
+                `;
+                donatedGrid.appendChild(card);
+            });
+        }
+
+        function grantScholarLoan(id) {
+            const item = resources.find(r => r.id === id);
+            if (!item) return;
+            showToast(`🎓 "${item.title.slice(0, 24)}..." assigned as semester grant to verified scholar!`, '🎓');
+        }
+
+        function toggleOwnerCatalogPreview() {
+            isOwnerViewingCatalog = !isOwnerViewingCatalog;
+            updateOwnerCatalogPreviewUI();
+            if (isOwnerViewingCatalog) {
+                returnToCatalog();
+                showToast("Owner inventory lens active: hub-held resources are highlighted.", "👑");
+            } else {
+                renderResources();
+                showToast("Switched back to the member catalog.", "🔒");
+            }
+        }
+
+        function exitOwnerCatalogPreview() {
+            isOwnerViewingCatalog = false;
+            updateOwnerCatalogPreviewUI();
+            renderResources();
+            showToast("Switched back to the member catalog.", "🔒");
+        }
+
+        function updateOwnerCatalogPreviewUI() {
+            const banner = document.getElementById('ownerCatalogBanner');
+            const statusText = document.getElementById('ownerPreviewStatusText');
+            const toggleBtn = document.getElementById('ownerPreviewToggleBtn');
+
+            if (banner) {
+                banner.classList.toggle('hidden', !isOwnerViewingCatalog);
+            }
+            if (statusText) {
+                statusText.innerText = isOwnerViewingCatalog
+                    ? "Owner inventory lens (hub stock is highlighted in the catalog)"
+                    : "Member Catalog (Hub stock is available to reserve)";
+            }
+            if (toggleBtn) {
+                toggleBtn.innerHTML = isOwnerViewingCatalog
+                    ? `<svg class="w-3.5 h-3.5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"/></svg><span>Turn Off Owner Preview</span>`
+                    : `<svg class="w-3.5 h-3.5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg><span>Preview Storefront as Owner</span>`;
+            }
+            renderResources();
+        }
+
+        // ================= BIBLIO CREDITS & ACCOUNT PROFILE =================
+        function updateCreditsDisplay() {
+            const navCreditsAmount = document.getElementById('navCreditsAmount');
+            const modalCreditsAmount = document.getElementById('modalCreditsAmount');
+            const checkoutAvailableCredits = document.getElementById('checkoutAvailableCredits');
+            const desktopUserAccountArea = document.getElementById('desktopUserAccountArea');
+            const activeCreditsSection = document.getElementById('activeCreditsSection');
+            const guestCreditsSection = document.getElementById('guestCreditsSection');
+            const accountModeIndicatorDot = document.getElementById('accountModeIndicatorDot');
+            const accountModeToggleText = document.getElementById('accountModeToggleText');
+            const userDisplayName = document.getElementById('userDisplayName');
+            const modalUserName = document.getElementById('modalUserName');
+            const modalUserRole = document.getElementById('modalUserRole');
+
+            const isLoggedIn = userAccount && userAccount.isLoggedIn;
+            const credits = userAccount ? userAccount.biblioCredits : 0;
+
+            if (navCreditsAmount) navCreditsAmount.innerText = `₱${credits.toFixed(2)}`;
+            if (modalCreditsAmount) modalCreditsAmount.innerText = `₱${credits.toFixed(2)}`;
+            if (checkoutAvailableCredits) checkoutAvailableCredits.innerText = `₱${credits.toFixed(2)}`;
+
+            if (isLoggedIn) {
+                if (desktopUserAccountArea) desktopUserAccountArea.classList.remove('opacity-50');
+                if (activeCreditsSection) activeCreditsSection.classList.remove('hidden');
+                if (guestCreditsSection) guestCreditsSection.classList.add('hidden');
+                if (accountModeIndicatorDot) {
+                    accountModeIndicatorDot.className = "w-1.5 h-1.5 rounded-full bg-emerald-400";
+                }
+                if (accountModeToggleText) accountModeToggleText.innerText = "Logged In (Member)";
+                if (userDisplayName) userDisplayName.innerText = userAccount.name;
+                if (modalUserName) modalUserName.innerText = userAccount.name;
+                if (modalUserRole) {
+                    modalUserRole.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-brand-teal animate-pulse"></span> <span>Verified Member Account</span>`;
+                }
+            } else {
+                if (activeCreditsSection) activeCreditsSection.classList.add('hidden');
+                if (guestCreditsSection) guestCreditsSection.classList.remove('hidden');
+                if (accountModeIndicatorDot) {
+                    accountModeIndicatorDot.className = "w-1.5 h-1.5 rounded-full bg-amber-400";
+                }
+                if (accountModeToggleText) accountModeToggleText.innerText = "Guest Mode (No Account)";
+                if (userDisplayName) userDisplayName.innerText = "Guest";
+                if (modalUserName) modalUserName.innerText = "Guest Visitor";
+                if (modalUserRole) {
+                    modalUserRole.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> <span>No Account Active</span>`;
+                }
+            }
+
+            renderCreditHistory();
+        }
+
+        function renderCreditHistory() {
+            const list = document.getElementById('creditHistoryList');
+            if (!list) return;
+            const history = userAccount && userAccount.creditHistory ? userAccount.creditHistory : [];
+            list.innerHTML = '';
+            if (history.length === 0) {
+                list.innerHTML = `<p class="text-[11px] text-gray-500 py-2 text-center">No credit activity yet.</p>`;
+                return;
+            }
+            history.forEach(item => {
+                const isEarned = item.type === 'earned';
+                const row = document.createElement('div');
+                row.className = "flex items-center justify-between p-2 rounded-xl bg-surface-800/60 border border-surface-700/50 text-[11px]";
+                row.innerHTML = `
+                    <div class="flex items-center gap-2 truncate pr-2">
+                        <span class="w-5 h-5 rounded-full ${isEarned ? 'bg-emerald-500/15 text-emerald-400' : 'bg-brand-purple/20 text-brand-fuchsia'} flex items-center justify-center text-[10px] font-bold">
+                            ${isEarned ? '+' : '-'}
+                        </span>
+                        <div class="truncate">
+                            <p class="text-gray-200 font-medium truncate">${escapeHtml(item.desc)}</p>
+                            <p class="text-[9px] text-gray-500">${escapeHtml(item.date)}</p>
+                        </div>
+                    </div>
+                    <span class="font-mono font-bold ${isEarned ? 'text-emerald-400' : 'text-gray-300'} whitespace-nowrap">
+                        ${isEarned ? '+' : '-'}₱${item.amount.toFixed(2)}
+                    </span>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        function openBiblioCreditsModal() {
+            hideAllModals();
+            openOverlay();
+            updateCreditsDisplay();
+            const modal = document.getElementById('accountCreditsModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function toggleAccountLoginStatus() {
+            userAccount.isLoggedIn = !userAccount.isLoggedIn;
+            saveMarketplaceState();
+            updateCreditsDisplay();
+            if (userAccount.isLoggedIn) {
+                showToast("Logged in to Student Account. Biblio Credits balance active!", "🪙");
+            } else {
+                showToast("Switched to Guest Mode. Biblio Credits are exclusive to users with accounts.", "ℹ️");
+            }
+        }
+
+        function signInStudentAccount() {
+            userAccount.isLoggedIn = true;
+            saveMarketplaceState();
+            updateCreditsDisplay();
+            showToast("Welcome back, Alex! Biblio Credits activated.", "🪙");
+        }
+
+        function claimStudyVoucher(amount = 100) {
+            if (!userAccount.isLoggedIn) {
+                showToast("Please sign in or activate your account to claim study vouchers.", "⚠️");
+                return;
+            }
+            userAccount.biblioCredits += amount;
+            userAccount.creditHistory.unshift({
+                id: Date.now(),
+                type: 'earned',
+                desc: 'Academic Study Voucher Grant',
+                amount: amount,
+                date: 'Just now'
+            });
+            saveMarketplaceState();
+            updateCreditsDisplay();
+            showToast(`🎉 +₱${amount.toFixed(2)} Biblio Credits added to your account!`, "🎁");
+        }
+
+        function openDonateFromCreditsModal() {
+            closeModals();
+            setTimeout(() => {
+                toggleConsignModal();
+                const blueRadio = document.querySelector('input[name="lisTag"][value="blue"]');
+                if (blueRadio) {
+                    blueRadio.checked = true;
+                    handleListingTypeChange('blue');
+                }
+                showToast("Donated books reward +100 Credits! Free for students; ₱35 hub fee funds platform.", "🔵");
+            }, 250);
+        }
+
+        function initConsignRadioListeners() {
+            document.querySelectorAll('input[name="lisTag"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    handleListingTypeChange(e.target.value);
+                });
+            });
+        }
+
+        function showToast(text, icon = '✨') {
+            const toast = document.getElementById('toastNotification');
+            if (!toast) return;
+            document.getElementById('toastText').innerText = text;
+            document.getElementById('toastIcon').innerText = icon;
+            toast.classList.remove('-translate-y-6', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('-translate-y-6', 'opacity-0');
+            }, 3200);
+        }
+    </script>
+</body>
+
+</html>
