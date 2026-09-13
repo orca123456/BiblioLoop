@@ -1804,6 +1804,135 @@
                 inventory: 'hub',
                 meetup: true,
                 delivery: true
+            },
+            {
+                id: 26,
+                title: 'Medical-Surgical Nursing Study Companion',
+                author: 'Davao Nursing Study Circle',
+                course: 'NURS 302',
+                price: 185.00,
+                category: 'Textbooks',
+                tag: 'red',
+                image: 'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500&q=80',
+                isbn: 'NURS-DVO-2026-11',
+                description: 'Organized nursing notes covering patient assessment, common conditions, care planning, and end-of-chapter practice questions.',
+                condition: 'Good',
+                location: 'Davao City',
+                seller: 'Mae R. · Mintal',
+                priceLabel: 'monthly rental',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 27,
+                title: 'Basic Calculus for Senior High School',
+                author: 'STEM Faculty Collaborative',
+                course: 'STEM CALCULUS',
+                price: 160.00,
+                category: 'Textbooks',
+                tag: 'green',
+                image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=500&q=80',
+                isbn: 'SHS-CALC-DVO-12',
+                description: 'Student-friendly lessons on limits, derivatives, and integrals with worked examples and practice exercises. Pages are clean and complete.',
+                condition: 'Like New',
+                location: 'Davao City',
+                seller: 'Paolo S. · Buhangin',
+                priceLabel: 'sale price',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 28,
+                title: 'Readings in Philippine History: Student Sourcebook',
+                author: 'Social Sciences Learning Group',
+                course: 'GE 2',
+                price: 0.00,
+                handlingFee: 35.00,
+                category: 'Textbooks',
+                tag: 'blue',
+                image: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&q=80',
+                isbn: 'RPH-DVO-2026-13',
+                description: 'A donated sourcebook containing primary readings, guide questions, and review notes for Philippine history coursework.',
+                condition: 'Good',
+                location: 'Davao City',
+                seller: 'BiblioLoop Central Hub (Donated)',
+                donor: 'USeP Student Council',
+                priceLabel: 'FREE (+₱35 Hub Fee)',
+                inventory: 'hub',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 29,
+                title: 'Data Structures and Algorithms Practice Guide',
+                author: 'Campus Computing Society',
+                course: 'CS 203',
+                price: 210.00,
+                category: 'Textbooks',
+                tag: 'green',
+                image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&q=80',
+                isbn: 'CS-DSA-DVO-14',
+                description: 'A practical guide to arrays, linked lists, trees, graphs, sorting, and algorithm analysis with annotated sample problems.',
+                condition: 'Like New',
+                location: 'Davao City',
+                seller: 'Ira T. · Obrero',
+                priceLabel: 'sale price',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 30,
+                title: 'Architecture Licensure Exam Planning Reviewer',
+                author: 'Mindanao Architecture Review Collective',
+                course: 'ALE REVIEW',
+                price: 240.00,
+                category: 'Reviewers',
+                tag: 'yellow',
+                image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=500&q=80',
+                isbn: 'ALE-DVO-2026-15',
+                description: 'Review material for architectural design, site planning, building utilities, professional practice, and timed problem exercises.',
+                condition: 'Good',
+                location: 'Davao City',
+                seller: 'Arki Jen · Matina',
+                priceLabel: 'swap value',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 31,
+                title: 'Organic Chemistry Reactions and Exercises',
+                author: 'Science Learning Press',
+                course: 'CHEM 202',
+                price: 175.00,
+                category: 'Textbooks',
+                tag: 'red',
+                image: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=500&q=80',
+                isbn: 'OCHEM-DVO-2026-16',
+                description: 'Concise reaction summaries, mechanism diagrams, laboratory reminders, and practice sets for introductory organic chemistry.',
+                condition: 'Good',
+                location: 'Davao City',
+                seller: 'Leah C. · Bajada',
+                priceLabel: 'monthly rental',
+                meetup: true,
+                delivery: true
+            },
+            {
+                id: 32,
+                title: 'The Little Prince',
+                author: 'Antoine de Saint-Exupéry',
+                course: 'FICTION',
+                price: 95.00,
+                category: 'Fiction',
+                tag: 'green',
+                image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=500&q=80',
+                isbn: '978-0156012195',
+                description: 'A well-kept paperback for leisure reading. The cover has light shelf wear, while the pages remain clean and complete.',
+                condition: 'Good',
+                location: 'Davao City',
+                seller: 'Rina P. · Ecoland',
+                priceLabel: 'sale price',
+                meetup: true,
+                delivery: true
             }
         );
 
@@ -1813,7 +1942,7 @@
         if (Array.isArray(savedResources) && savedResources.length) {
             resources = savedResources;
             // Keep starter reviewer listings available when older saved catalogs are loaded
-            [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25].forEach(newId => {
+            [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32].forEach(newId => {
                 const item = defaultStarterResources.find(r => r.id === newId);
                 if (item && !resources.some(r => r.id === newId)) {
                     resources.push(item);
@@ -1876,7 +2005,7 @@
 
         let currentCategory = 'All';
         let currentLocationFilter = userAccount.location || 'Davao City';
-        let visibleResourceLimit = 9;
+        let visibleResourceLimit = 20;
         let currentResourceId = null;
         let selectedFulfillment = 'meetup';
         let conversations = loadJSON('biblioloop_conversations', {});
@@ -2181,18 +2310,18 @@
 
         // Filtering Logic
         function filterResources() {
-            visibleResourceLimit = 9;
+            visibleResourceLimit = 20;
             renderResources();
         }
 
         function showMoreResources() {
-            visibleResourceLimit += 9;
+            visibleResourceLimit += 20;
             renderResources();
         }
 
         function clearSearch() {
             document.getElementById('searchInput').value = '';
-            visibleResourceLimit = 9;
+            visibleResourceLimit = 20;
             renderResources();
         }
 
@@ -2207,7 +2336,7 @@
 
         function setCategory(cat, btn) {
             currentCategory = cat;
-            visibleResourceLimit = 9;
+            visibleResourceLimit = 20;
             document.querySelectorAll('.cat-btn').forEach(b => {
                 b.classList.remove('active', 'bg-brand-violet', 'text-white', 'border-brand-purple/40');
                 b.classList.add('bg-surface-850', 'text-gray-400', 'border-surface-700/60');
@@ -2219,7 +2348,7 @@
 
         function setLocationFilter(location, btn) {
             currentLocationFilter = location;
-            visibleResourceLimit = 9;
+            visibleResourceLimit = 20;
             const catalogLocationSelect = document.getElementById('catalogLocationSelect');
             if (catalogLocationSelect) {
                 catalogLocationSelect.value = location === 'All' ? '' : location;
